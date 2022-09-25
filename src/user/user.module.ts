@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 import { SequelizeModule } from '@nestjs/sequelize'
 import { AuthModule } from 'src/auth/auth.module'
 import { BackupModule } from 'src/backup/backup.module'
-import { Post } from 'src/post/post.model'
+import { UPost } from 'src/post/post.model'
 import { Role } from 'src/role/role.model'
 import { RoleModule } from 'src/role/role.module'
 import { UserRoles } from 'src/role/user-roles.model'
@@ -17,14 +17,14 @@ import { UserService } from './user.service'
     providers: [UserService],
     exports: [UserService],
     imports: [
-        SequelizeModule.forFeature([User, Role, UserRoles, Post]),
+        SequelizeModule.forFeature([User, Role, UserRoles, UPost]),
         RoleModule,
         BackupModule,
         forwardRef(() => AuthModule),
         HttpModule.register({
             timeout: 5000,
             maxRedirects: 5,
-          }),
+        }),
     ],
 })
 export class UserModule {}

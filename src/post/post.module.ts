@@ -7,12 +7,12 @@ import { FilesModule } from 'src/files/files.module'
 import { User } from 'src/user/user.model'
 import { UserModule } from 'src/user/user.module'
 import { PostController } from './post.controller'
-import { Post } from './post.model'
+import { UPost } from './post.model'
 import { PostService } from './post.service'
 
 @Module({
     controllers: [PostController],
     providers: [PostService],
-    imports: [SequelizeModule.forFeature([User, Post,Chapter,SubChapt]), FilesModule,ChaptersModule,UserModule],
+    imports: [SequelizeModule.forFeature([User, UPost, Chapter, SubChapt]), FilesModule, ChaptersModule, UserModule],
 })
 export class PostModule {}

@@ -1,16 +1,21 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { BackupService } from 'src/backup/backup.service'
 import { ChangeRoleDto } from './dto/ChangeRole.dto'
 import { CreateUserDto } from './dto/create_user.dto'
 import { UpdateUserDto } from './dto/UpdateUser.dto'
+import { User } from './user.model'
 import { UserService } from './user.service'
 
+@ApiTags('Пользователи')
 @Controller('user')
 export class UserController {
     constructor(private UserService: UserService, private BackupService: BackupService) {}
 
+    @ApiOperation({ summary: 'Создание пользователя' })
+    @ApiResponse({ status: 201, type: User })
     @UseGuards(RolesGuard)
     @Roles('USER')
     @Post('/create')
@@ -18,13 +23,17 @@ export class UserController {
         return this.UserService.createUser(Dto)
     }
 
+    @ApiOperation({ summary: 'Поиск пользователя по почте' })
+    @ApiResponse({ status: 200, type: User })
     @UseGuards(RolesGuard)
     @Roles('USER')
-    @Post()
+    @Post('/byemail')
     GetUserByEmail(@Body('email') email: string) {
         return this.UserService.getUserByEmail(email)
     }
 
+    @ApiOperation({ summary: 'Выдать роль' })
+    @ApiResponse({ status: 200 })
     @UseGuards(RolesGuard)
     @Roles('ADMIN')
     @Post('/addrole')
@@ -32,6 +41,8 @@ export class UserController {
         return this.UserService.addRole(dto)
     }
 
+    @ApiOperation({ summary: 'Изменение данных пользователя' })
+    @ApiResponse({ status: 200, type: User })
     @UseGuards(RolesGuard)
     @Roles('USER', 'ADMIN')
     @Post('/updata')
@@ -39,21 +50,12 @@ export class UserController {
         return this.UserService.updateUser(dto)
     }
 
+    @ApiOperation({ summary: 'Получить всех пользователей' })
+    @ApiResponse({ status: 200, type: [User] })
     @UseGuards(RolesGuard)
     @Roles('ADMIN')
     @Get('/all')
     AllPeople() {
         return this.UserService.getAll()
     }
-
-    @UseGuards(RolesGuard)
-    @Roles('ADMIN')
-    @Get('/log')
-    GetLogOfBackup() {
-        return this.BackupService.GetLog()
-    }
-
-    /* @UseGuards(RolesGuard)
-    @Roles('ADMIN')
-    @Post('/') */
 }

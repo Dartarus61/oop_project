@@ -1,5 +1,5 @@
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
-import { Post } from 'src/post/post.model'
+import { UPost } from 'src/post/post.model'
 
 @Table({ tableName: 'file' })
 export class FileFolder extends Model<FileFolder> {
@@ -17,11 +17,10 @@ export class FileFolder extends Model<FileFolder> {
     @Column({ type: DataType.STRING, allowNull: false })
     nameOfContent: string
 
-    @ForeignKey(()=>Post)
-    @Column({type:DataType.INTEGER})
-    postId:number
+    @ForeignKey(() => UPost)
+    @Column({ type: DataType.INTEGER })
+    postId: number
 
-    @BelongsTo(()=>Post)
-    post:Post
-
+    @BelongsTo(() => UPost)
+    post: UPost
 }

@@ -1,4 +1,15 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from 'sequelize-typescript'
+import { ApiProperty } from '@nestjs/swagger'
+import {
+    BelongsTo,
+    BelongsToMany,
+    Column,
+    DataType,
+    ForeignKey,
+    HasMany,
+    HasOne,
+    Model,
+    Table,
+} from 'sequelize-typescript'
 import { Chapter } from 'src/chapters/chapter.model'
 import { SubChapt } from 'src/chapters/subchapters.model'
 import { Comment } from 'src/comment/comment.model'
@@ -11,7 +22,8 @@ interface PostCreationAttrs {
 }
 
 @Table({ tableName: 'posts' })
-export class Post extends Model<Post, PostCreationAttrs> {
+export class UPost extends Model<UPost, PostCreationAttrs> {
+    @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({
         type: DataType.INTEGER,
         unique: true,
@@ -20,11 +32,13 @@ export class Post extends Model<Post, PostCreationAttrs> {
     })
     id: number
 
+    @ApiProperty({ example: 'JavaFX - введение', description: 'Название главы' })
     @Column({ type: DataType.STRING, allowNull: false })
     title: string
 
-    @Column({type:DataType.STRING(4096),allowNull:true})
-    description:string
+    @ApiProperty({ example: 'Что то в ведении про Java', description: 'Содержание статьи' })
+    @Column({ type: DataType.STRING(4096), allowNull: true })
+    description: string
 
     @HasMany(() => FileFolder)
     files: FileFolder[]
@@ -39,18 +53,17 @@ export class Post extends Model<Post, PostCreationAttrs> {
     @HasMany(() => Comment)
     comments: Comment[]
 
-    @ForeignKey(()=>SubChapt)
-    @Column({type:DataType.INTEGER})
+    @ForeignKey(() => SubChapt)
+    @Column({ type: DataType.INTEGER })
     subchapterId: number
 
-    @BelongsTo(()=>SubChapt)
-    subChapt:SubChapt
+    @BelongsTo(() => SubChapt)
+    subChapt: SubChapt
 
-
-    @ForeignKey(()=>Chapter)
-    @Column({type:DataType.INTEGER})
+    @ForeignKey(() => Chapter)
+    @Column({ type: DataType.INTEGER })
     chapterrId: number
 
-    @BelongsTo(()=>Chapter)
-    chapter:Chapter
+    @BelongsTo(() => Chapter)
+    chapter: Chapter
 }

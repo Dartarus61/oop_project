@@ -1,4 +1,4 @@
-import { HttpException, Injectable,HttpStatus } from '@nestjs/common'
+import { HttpException, Injectable, HttpStatus } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Op } from 'sequelize'
 import { Chapter } from 'src/chapters/chapter.model'
@@ -11,53 +11,52 @@ import { User } from 'src/user/user.model'
 import { UserService } from 'src/user/user.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { GetGroupOffers } from './dto/getGroupOffers.dto'
-import { Post } from './post.model'
+import { UPost } from './post.model'
 
 @Injectable()
 export class PostService {
     constructor(
-        @InjectModel(Post) private postRepository: typeof Post,
+        @InjectModel(UPost) private postRepository: typeof UPost,
         @InjectModel(User) private userRepository: typeof User,
         private userService: UserService,
         private fileService: FilesService,
         private chapterService: ChaptersService
     ) {}
-//Array<Express.Multer.File>
+    //Array<Express.Multer.File>
     async createPost(dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
         const user = await this.userService.getUserById(dto.userId)
-        if (user){
-            const post = await this.postRepository.create({title:dto.title})
-            await user.$add('posts',post)
+        if (user) {
+            const post = await this.postRepository.create({ title: dto.title })
+            await user.$add('posts', post)
             const chapt = await this.chapterService.GetChupterByName(dto.chapter)
             const sub = await this.chapterService.GetSubByName(dto.subsection)
-            await chapt.$add('posts',post)
-            await sub.$add('posts',post)
-                if (files) {
-                    const newFiles = await this.fileService.createFile(dto.description,files)
-                    post.$add('files',newFiles)
-                    return post
-                }
-            const nameingOfTXT= await this.fileService.createFile(dto.description)
-            await post.$add('files',nameingOfTXT)
-            return post
-    }
-    throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
-    }
-
-    async CreateSimpePost(dto:CreatePostDto):Promise<object> {
-        const user = await this.userService.getUserById(dto.userId)
-        if (user){
-            const post = await this.postRepository.create({title:dto.title,description:dto.description})
-            await user.$add('posts',post)
-            const chapt = await this.chapterService.GetChupterByName(dto.chapter)
-            const sub = await this.chapterService.GetSubByName(dto.subsection)
-            await chapt.$add('posts',post)
-            await sub.$add('posts',post)
+            await chapt.$add('posts', post)
+            await sub.$add('posts', post)
+            if (files) {
+                const newFiles = await this.fileService.createFile(dto.description, files)
+                post.$add('files', newFiles)
+                return post
+            }
+            const nameingOfTXT = await this.fileService.createFile(dto.description)
+            await post.$add('files', nameingOfTXT)
             return post
         }
-        throw new HttpException('Пользователь не найден',HttpStatus.NOT_FOUND)
-    } 
+        throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
+    }
 
+    async CreateSimpePost(dto: CreatePostDto): Promise<object> {
+        const user = await this.userService.getUserById(dto.userId)
+        if (user) {
+            const post = await this.postRepository.create({ title: dto.title, description: dto.description })
+            await user.$add('posts', post)
+            const chapt = await this.chapterService.GetChupterByName(dto.chapter)
+            const sub = await this.chapterService.GetSubByName(dto.subsection)
+            await chapt.$add('posts', post)
+            await sub.$add('posts', post)
+            return post
+        }
+        throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+    }
 
     async Offerconstruct(posts) {
         let massOfPosts = []
@@ -67,7 +66,7 @@ export class PostService {
 
             let user = await this.userService.getUserById(posts[index].userId)
 
-            massOfPosts[index].Author = `${user.name} ${user.surname} ${user.secondname}`
+            massOfPosts[index].Author = `${user.name} ${user.surname}`
             if (!massOfPosts[index].Comments) continue
 
             for (let j = 0; j < massOfPosts[index].Comments.length; j++) {
@@ -76,7 +75,7 @@ export class PostService {
                     raw: true,
                 })
 
-                massOfPosts[index].Comments[j].Name = `${boss.name} ${boss.surname} ${boss.secondname}`
+                massOfPosts[index].Comments[j].Name = `${boss.name} ${boss.surname}`
             }
         }
 
@@ -85,12 +84,12 @@ export class PostService {
     }
 
     async GetOffersByUserId(id: number): Promise<object[]> {
-        const user = await this.postRepository.findAll({ where: { userId: id }, include: [{all:true}] })
-        
-        if (!user) throw new HttpException('Пользователь не найден',HttpStatus.NOT_FOUND)
+        const user = await this.postRepository.findAll({ where: { userId: id }, include: [{ all: true }] })
+
+        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
         let myoffers = []
-        console.log(user);
-        
+        console.log(user)
+
         for (let index = 0; index < user.length; index++) {
             let parsejson = JSON.stringify(user[index], null, 2)
             myoffers.push(JSON.parse(parsejson))
@@ -103,19 +102,18 @@ export class PostService {
                     raw: true,
                 })
 
-                myoffers[index].Comments[j].Name = boss.name + ' ' + boss.surname + ' ' + boss.secondname
+                myoffers[index].Comments[j].Name = boss.name + ' ' + boss.surname
             }
         }
         myoffers.sort((a, b) => a.id - b.id)
         return myoffers
     }
 
-    async GetGroupOffersByModule(dto: GetGroupOffers): Promise<object[]> {
-        const chapter = await this.chapterService.GetChupterByName(dto.chapter)
-        if (!chapter) throw new HttpException('Обучающий модуль не найден',HttpStatus.NOT_FOUND)
+    async GetGroupOffersByModule(chapter: string): Promise<object[]> {
+        const chapt = await this.chapterService.GetChupterByName(chapter)
+        if (!chapt) throw new HttpException('Обучающий модуль не найден', HttpStatus.NOT_FOUND)
         const allposts = await this.postRepository.findAll()
         let postWithComments = await this.Offerconstruct(allposts)
         return postWithComments
     }
-
 }

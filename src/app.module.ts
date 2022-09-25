@@ -7,7 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { User } from './user/user.model'
 import { PostModule } from './post/post.module'
 import * as path from 'path'
-import { Post } from './post/post.model'
+import { UPost } from './post/post.model'
 import { RoleModule } from './role/role.module'
 import { Role } from './role/role.model'
 import { UserRoles } from './role/user-roles.model'
@@ -17,7 +17,7 @@ import { Comment } from './comment/comment.model'
 import { BackupModule } from './backup/backup.module'
 import { History } from './backup/backup-history.model'
 import { Details } from './backup/backup-details.model'
-import { ChaptersModule } from './chapters/chapters.module';
+import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/chapter.model'
 import { SubChapt } from './chapters/subchapters.model'
 import { FileFolder } from './files/file.model'
@@ -39,7 +39,7 @@ import { FileFolder } from './files/file.model'
             username: 'postgres',
             password: 'postgres',
             database: 'tryoop',
-            models: [User, Post, Role, UserRoles, Comment, History, Details,Chapter,SubChapt,FileFolder],
+            models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, SubChapt, FileFolder],
             autoLoadModels: true,
             sync: { alter: true },
         }),
