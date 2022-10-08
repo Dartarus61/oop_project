@@ -116,4 +116,5 @@ export class PostService {
         let postWithComments = await this.Offerconstruct(allposts)
         return postWithComments
     }
+    
 }

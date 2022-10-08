@@ -31,4 +31,9 @@ export class ChaptersController {
     GetAll() {
         return this.chapterService.getall()
     }
+
+    @Get()
+    ladder() {
+        return this.chapterService.getLesenkaGlav()
+    }
 }

@@ -24,7 +24,7 @@ export class SubChapt extends Model<SubChapt> {
     })
     id: number
 
-    @ApiProperty({ example: 'JavaFX', description: 'Название подраздела' })
+    /* @ApiProperty({ example: 'JavaFX', description: 'Название подраздела' })
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
@@ -36,5 +36,5 @@ export class SubChapt extends Model<SubChapt> {
     chapterId: number
 
     @BelongsTo(() => Chapter)
-    chapter: Chapter
+    chapter: Chapter */
 }

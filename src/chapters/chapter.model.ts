@@ -18,9 +18,12 @@ export class Chapter extends Model<Chapter> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
+    @Column({type:DataType.INTEGER,allowNull:true})
+    idParent:number
+
     @HasMany(() => UPost)
     posts: UPost[]
 
-    @HasMany(() => SubChapt)
-    subChapt: SubChapt[]
+    /* @HasMany(() => SubChapt)
+    subChapt: SubChapt[] */
 }

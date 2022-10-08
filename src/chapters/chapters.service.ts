@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import sequelize from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { Chapter } from './chapter.model';
 import { CreateChapterDto } from './dto/CreateChapter.dto';
 import { CreateSubChapterDto } from './dto/CreateSubChapter.dto';
@@ -28,7 +30,7 @@ export class ChaptersService {
     }
 
     async GetChupterByName(name:string) {
-        const chupter = await this.ChapterRepository.findOne({where:{name}, include:[SubChapt]})
+        const chupter = await this.ChapterRepository.findOne({where:{name}})
         if (chupter) {
             return chupter
         }
@@ -36,7 +38,7 @@ export class ChaptersService {
     }
 
     async GetSubByName(name:string) {
-        const subchupter = await this.SubChapterRepository.findOne({where:{name}, include:[{all:true}]})
+        const subchupter = await this.ChapterRepository.findOne({where:{name}})
         if (subchupter) {
             return subchupter
         }
@@ -48,4 +50,8 @@ export class ChaptersService {
         return chapt
     }
 
+    async getLesenkaGlav(){
+        const main:Chapter[] = await this.ChapterRepository.findAll({where:{idParent:null}})  
+      
+    }
 }

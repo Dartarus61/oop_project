@@ -21,11 +21,25 @@ import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/chapter.model'
 import { SubChapt } from './chapters/subchapters.model'
 import { FileFolder } from './files/file.model'
+import { MailerModule } from '@nestjs-modules/mailer'
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+
 
 @Module({
     imports: [
-        UserModule,
-        AuthModule,
+        MailerModule.forRoot({
+            transport: 'smtps://project.oop@mail.ru:PFw6RrKEef2J8jkWdfHs@smtp.mail.ru',
+      defaults: {
+        from: '"no reply" <project.oop@mail.ru>',
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new EjsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+        }),
         ConfigModule.forRoot({
             envFilePath: `.env`,
         }),
@@ -34,16 +48,24 @@ import { FileFolder } from './files/file.model'
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
-            host: process.env.DB_HOST ||'localhost',
+            host: 'localhost',
             port: 5432,
-            username:process.env.DB_USER||  'postgres',
-            password:process.env.DB_PASSWORD || 'postgres',
-            database:process.env.DB_NAME || 'tryoop',
+            username:'postgres',
+            password:'postgres',
+            database:'tryoop',
             models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, SubChapt, FileFolder],
             autoLoadModels: true,
             sync: { alter: true },
-            ssl:true
+            /* dialectOptions:{
+                ssl:{
+                    require: true,
+                    rejectUnauthorized: false,
+                }
+            } */
+            
         }),
+        UserModule,
+        AuthModule,
         PostModule,
         RoleModule,
         FilesModule,

@@ -53,12 +53,12 @@ export class UPost extends Model<UPost, PostCreationAttrs> {
     @HasMany(() => Comment)
     comments: Comment[]
 
-    @ForeignKey(() => SubChapt)
+    /* @ForeignKey(() => Chapter)
     @Column({ type: DataType.INTEGER })
     subchapterId: number
 
     @BelongsTo(() => SubChapt)
-    subChapt: SubChapt
+    subChapt: SubChapt */
 
     @ForeignKey(() => Chapter)
     @Column({ type: DataType.INTEGER })
