@@ -22,26 +22,26 @@ import { Chapter } from './chapters/chapter.model'
 import { SubChapt } from './chapters/subchapters.model'
 import { FileFolder } from './files/file.model'
 import { MailerModule } from '@nestjs-modules/mailer'
-import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 
 @Module({
     imports: [
         MailerModule.forRoot({
             transport: 'smtps://project.oop@mail.ru:PFw6RrKEef2J8jkWdfHs@smtp.mail.ru',
-      defaults: {
-        from: '"no reply" <project.oop@mail.ru>',
-      },
-      template: {
-        dir: __dirname + '/templates',
-        adapter: new EjsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
+            defaults: {
+                from: '"no reply" <project.oop@mail.ru>',
+            },
+            template: {
+                dir: __dirname + '/templates',
+                adapter: new EjsAdapter(),
+                options: {
+                    strict: true,
+                },
+            },
         }),
         ConfigModule.forRoot({
             envFilePath: `.env`,
+            isGlobal: true,
         }),
         ServeStaticModule.forRoot({
             rootPath: path.resolve(__dirname, 'static'),
@@ -50,9 +50,9 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
             dialect: 'postgres',
             host: 'localhost',
             port: 5432,
-            username:'postgres',
-            password:'postgres',
-            database:'tryoop',
+            username: 'postgres',
+            password: 'postgres',
+            database: 'tryoop',
             models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, SubChapt, FileFolder],
             autoLoadModels: true,
             sync: { alter: true },
@@ -62,7 +62,6 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
                     rejectUnauthorized: false,
                 }
             } */
-            
         }),
         UserModule,
         AuthModule,

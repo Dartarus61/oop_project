@@ -13,7 +13,6 @@ import { User } from './user.model'
 import * as uuid from 'uuid'
 import { MailService } from 'src/mail/mail.service'
 
-
 @Injectable()
 export class UserService {
     constructor(
@@ -22,7 +21,7 @@ export class UserService {
         private roleService: RoleService,
         private backupService: BackupService,
         private httpService: HttpService,
-        private mailService:MailService
+        private mailService: MailService
     ) {}
 
     async createUser(dto: CreateUserDto) {
@@ -31,9 +30,9 @@ export class UserService {
         await user.$set('roles', [role.id])
         user.roles = [role]
         const acticationLink = uuid.v4()
-        await user.update({acticationLink})
-        this.mailService.sendActivation(user.email,user.acticationLink)
-        
+        await user.update({ acticationLink })
+        //this.mailService.sendActivation(user.email,user.acticationLink)
+
         //this.create(log)
         //this.backupService.CreateLine(await this.backupService.createDto(log))
         return user
@@ -76,10 +75,10 @@ export class UserService {
         return user
     }
 
-    async getUserById(id:number) {
+    async getUserById(id: number) {
         const user = await this.userRepository.findByPk(id)
         if (user) return user
-        throw new HttpException('пользователь не найден',HttpStatus.NOT_FOUND)
+        throw new HttpException('пользователь не найден', HttpStatus.NOT_FOUND)
     }
 
     async deleteUser(email: string) {
@@ -87,12 +86,12 @@ export class UserService {
         await this.userRepository.destroy({ where: { id: user.id } })
     }
 
-    async activate(value:string) {
-        const user = await this.userRepository.findOne({where:{acticationLink:value}})
+    async activate(value: string) {
+        const user = await this.userRepository.findOne({ where: { acticationLink: value } })
         if (user) {
-            user.update({isActivated:true})
+            user.update({ isActivated: true })
             return user
         }
-        throw new HttpException('Пользователь не найден',HttpStatus.NOT_FOUND)
+        throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
     }
 }

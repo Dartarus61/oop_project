@@ -116,5 +116,9 @@ export class PostService {
         let postWithComments = await this.Offerconstruct(allposts)
         return postWithComments
     }
-    
+
+    async getPostBySubChapters(id: number) {
+        const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
+        return posts
+    }
 }

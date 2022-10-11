@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
 import { SequelizeModule } from '@nestjs/sequelize'
+import { AuthModule } from 'src/auth/auth.module'
 import { Chapter } from 'src/chapters/chapter.model'
 import { ChaptersModule } from 'src/chapters/chapters.module'
 import { SubChapt } from 'src/chapters/subchapters.model'
@@ -13,6 +15,14 @@ import { PostService } from './post.service'
 @Module({
     controllers: [PostController],
     providers: [PostService],
-    imports: [SequelizeModule.forFeature([User, UPost, Chapter, SubChapt]), FilesModule, ChaptersModule, UserModule],
+    imports: [
+        SequelizeModule.forFeature([User, UPost, Chapter, SubChapt]),
+        FilesModule,
+        ChaptersModule,
+        UserModule,
+        JwtModule,
+        AuthModule,
+    ],
+    exports: [PostService],
 })
 export class PostModule {}

@@ -18,8 +18,11 @@ export class Chapter extends Model<Chapter> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
-    @Column({type:DataType.INTEGER,allowNull:true})
-    idParent:number
+    @Column({ type: DataType.INTEGER, allowNull: true })
+    idParent: number
+
+    @Column({ type: DataType.STRING, allowNull: false })
+    path: string
 
     @HasMany(() => UPost)
     posts: UPost[]
