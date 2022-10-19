@@ -25,6 +25,11 @@ export class AuthService {
         const payload = { email: user.email, id: user.id, roles: user.roles }
         return {
             token: this.jwtService.sign(payload, { secret: process.env.PRIVATE_KEY }),
+            user: {
+                id:user.id,
+                email:user.email,
+                isActivated:user.isActivated
+            }
         }
     }
 

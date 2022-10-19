@@ -6,7 +6,6 @@ import { Chapter } from './chapter.model'
 import { ChaptersService } from './chapters.service'
 import { CreateChapterDto } from './dto/CreateChapter.dto'
 import { CreateSubChapterDto } from './dto/CreateSubChapter.dto'
-import { SubChapt } from './subchapters.model'
 
 @ApiTags('Разделы и подразделы')
 @Controller('chapters')

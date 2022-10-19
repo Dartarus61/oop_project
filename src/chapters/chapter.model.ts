@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
 import { UPost } from 'src/post/post.model'
-import { SubChapt } from './subchapters.model'
 
 @Table({ tableName: 'chapter' })
 export class Chapter extends Model<Chapter> {

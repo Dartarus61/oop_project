@@ -3,13 +3,11 @@ import { InjectModel } from '@nestjs/sequelize'
 import sequelize, { Op } from 'sequelize'
 import { Chapter } from './chapter.model'
 import { CreateChapterDto } from './dto/CreateChapter.dto'
-import { SubChapt } from './subchapters.model'
 
 @Injectable()
 export class ChaptersService {
     constructor(
         @InjectModel(Chapter) private ChapterRepository: typeof Chapter,
-        @InjectModel(SubChapt) private SubChapterRepository: typeof SubChapt
     ) {}
 
     async CreateChapter(dto: CreateChapterDto) {

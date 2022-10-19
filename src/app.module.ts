@@ -19,7 +19,6 @@ import { History } from './backup/backup-history.model'
 import { Details } from './backup/backup-details.model'
 import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './chapters/chapter.model'
-import { SubChapt } from './chapters/subchapters.model'
 import { FileFolder } from './files/file.model'
 import { MailerModule } from '@nestjs-modules/mailer'
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
@@ -53,9 +52,9 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
             username: 'postgres',
             password: 'postgres',
             database: 'tryoop',
-            models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, SubChapt, FileFolder],
+            models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, FileFolder],
             autoLoadModels: true,
-            sync: { alter: true },
+            sync: { force: true },
             /* dialectOptions:{
                 ssl:{
                     require: true,
