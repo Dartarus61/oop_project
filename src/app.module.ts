@@ -25,10 +25,14 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: `.env`,
+            isGlobal: true,
+        }),
         MailerModule.forRoot({
-            transport: 'smtps://project.oop@mail.ru:PFw6RrKEef2J8jkWdfHs@smtp.mail.ru',
+            transport: `smtps://${process.env.SMTP_USER}:${process.env.SMTP_PASSWORD}@${process.env.SMTP_HOST}`,
             defaults: {
-                from: '"no reply" <project.oop@mail.ru>',
+                from: '"no reply" <${process.env.SMTP_USER}>',
             },
             template: {
                 dir: __dirname + '/templates',
@@ -38,20 +42,16 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
                 },
             },
         }),
-        ConfigModule.forRoot({
-            envFilePath: `.env`,
-            isGlobal: true,
-        }),
         ServeStaticModule.forRoot({
             rootPath: path.resolve(__dirname, 'static'),
         }),
         SequelizeModule.forRoot({
             dialect: 'postgres',
-            host: 'localhost',
-            port: 5432,
-            username: 'postgres',
-            password: 'postgres',
-            database: 'tryoop',
+            host: process.env.DB_HOST || 'localhost',
+            port: Number(process.env.DB_PORT) ||  5432,
+            username: process.env.DB_USER ||  'postgres',
+            password: process.env.DB_PASSWORD ||  'postgres',
+            database: process.env.DB_NAME ||  'tryoop',
             models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, FileFolder],
             autoLoadModels: true,
             sync: { force: true },
