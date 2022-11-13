@@ -36,24 +36,24 @@ export class BackupService {
         const line = await this.HistoryRepository.create({ ...dto, current: true, idOfLine: id })
         const logLine = await this.HistoryRepository.findOne({ where: { id: line.id - 1 } })
         if (logLine) logLine.update({ current: false })
-        let column_name_mas = my_details.column_name.split(',')
+        const column_name_mas = my_details.column_name.split(',')
         column_name_mas.pop()
         for (let index = 0; index < column_name_mas.length; index++) {
-            let details = await this.DetailsRepository.create({
+            const details = await this.DetailsRepository.create({
                 column_name: column_name_mas[index],
                 value: { ...my_details.value },
             })
             await line.$add('details', details)
         }
-        console.log(typeof line);
-        
+        console.log(typeof line)
+
         return line
     }
 
     async createDto(/* method: string, table_name: string, predto, columns?, */ dto?: createPreLogDto) {
         console.log('123123123231231')
 
-        let str: string = ''
+        let str = ''
         let time: string
         if (dto.method == 'create') {
             for (const key in dto.predto) {
@@ -66,7 +66,7 @@ export class BackupService {
             }
             time = dto.predto.updatedAt
         }
-        let full_dto = {
+        const full_dto = {
             action: dto.method,
             table_name: dto.table_name,
             data: time,

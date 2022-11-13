@@ -9,7 +9,7 @@ import { PostModule } from 'src/post/post.module'
 @Module({
     providers: [ChaptersService],
     controllers: [ChaptersController],
-    imports: [SequelizeModule.forFeature([Chapter]), forwardRef(()=> PostModule)],
+    imports: [SequelizeModule.forFeature([Chapter]), forwardRef(() => PostModule)],
     exports: [ChaptersService],
 })
 export class ChaptersModule {}

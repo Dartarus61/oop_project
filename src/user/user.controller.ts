@@ -23,10 +23,9 @@ export class UserController {
     }
 
     @Get('/activ/:value')
-    activation(@Param('value') value:string) {
+    activation(@Param('value') value: string) {
         return this.UserService.activate(value)
     }
-
 
     @ApiOperation({ summary: 'Поиск пользователя по почте' })
     @ApiResponse({ status: 200, type: User })

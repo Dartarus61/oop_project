@@ -7,48 +7,48 @@ import { FileFolder } from './file.model'
 
 @Injectable()
 export class FilesService {
-constructor(@InjectModel(FileFolder) private fileRepository:typeof FileFolder){}
+    constructor(@InjectModel(FileFolder) private fileRepository: typeof FileFolder) {}
 
-    async createFile(text?:string,file?:Array<Express.Multer.File>): Promise<FileFolder[]> {
+    async createFile(text?: string, file?: Array<Express.Multer.File>): Promise<FileFolder[]> {
         try {
-            const masReturn:any[]=[]
-            let filePath = path.resolve(__dirname, '..', 'static')
+            const masReturn: any[] = []
+            const filePath = path.resolve(__dirname, '..', 'static')
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true })
             }
             masReturn.push(filePath)
             if (file) {
-                let fileName:string=''
+                let fileName = ''
                 for (let index = 0; index < file.length; index++) {
-                    fileName= uuid.v4() + '.jpg'
-                    console.log(fileName);
-                    
+                    fileName = uuid.v4() + '.jpg'
+                    console.log(fileName)
+
                     fs.writeFileSync(path.join(filePath, fileName), file[index].buffer)
                     masReturn.push(fileName)
                 }
             }
-            let fileNameTxt=uuid.v4()+'.txt'
+            const fileNameTxt = uuid.v4() + '.txt'
             fs.writeFileSync(path.join(filePath, fileNameTxt), text)
             masReturn.push(fileNameTxt)
             return await this.GenerateFileDB(masReturn)
         } catch (e) {
-            console.log(e);
-            
+            console.log(e)
+
             throw new HttpException('Произошла ошибка при записи файла', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
-    async GenerateFileDB(FileDataArr:string[]): Promise<FileFolder[]> {
-        const ArrOfObjectByFiles:FileFolder[]=[]
-        let file:FileFolder
+    async GenerateFileDB(FileDataArr: string[]): Promise<FileFolder[]> {
+        const ArrOfObjectByFiles: FileFolder[] = []
+        let file: FileFolder
         for (let index = 1; index < FileDataArr.length; index++) {
-           file = await this.fileRepository.create({contentPath:FileDataArr[0],nameOfContent:FileDataArr[index]}) 
-           ArrOfObjectByFiles.push(file)
+            file = await this.fileRepository.create({ contentPath: FileDataArr[0], nameOfContent: FileDataArr[index] })
+            ArrOfObjectByFiles.push(file)
         }
         return ArrOfObjectByFiles
     }
 
-    async GetFileToUser(name:string) {
+    async GetFileToUser(name: string) {
         //TODO:сделать выгрузку файлов(картинок) в контексте всей статьи. уточнить у Алексея, если забуду
     }
 }

@@ -23,7 +23,8 @@ export class PostService {
     ) {}
     //Array<Express.Multer.File>
     async createPost(dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
-        const user = await this.userService.getUserById(dto.userId)
+        try {
+            const user = await this.userService.getUserById(dto.userId)
         if (user) {
             const post = await this.postRepository.create({ title: dto.title })
             await user.$add('posts', post)
@@ -41,10 +42,15 @@ export class PostService {
             return post
         }
         throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 
     async CreateSimpePost(dto: CreatePostDto): Promise<object> {
-        const user = await this.userService.getUserById(dto.userId)
+        try {
+            const user = await this.userService.getUserById(dto.userId)
         if (user) {
             const post = await this.postRepository.create({ title: dto.title, description: dto.description })
             await user.$add('posts', post)
@@ -55,21 +61,26 @@ export class PostService {
             return post
         }
         throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 
     async Offerconstruct(posts) {
-        let massOfPosts = []
+        try {
+           const massOfPosts = []
         for (let index = 0; index < posts.length; index++) {
-            let ParseOffer = JSON.stringify(posts[index], null, 2)
+            const ParseOffer = JSON.stringify(posts[index], null, 2)
             massOfPosts.push(JSON.parse(ParseOffer))
 
-            let user = await this.userService.getUserById(posts[index].userId)
+            const user = await this.userService.getUserById(posts[index].userId)
 
             massOfPosts[index].Author = `${user.name} ${user.surname}`
             if (!massOfPosts[index].Comments) continue
 
             for (let j = 0; j < massOfPosts[index].Comments.length; j++) {
-                let boss = await this.userRepository.findOne({
+                const boss = await this.userRepository.findOne({
                     where: { id: massOfPosts[index].Comments[j].userId },
                     raw: true,
                 })
@@ -79,24 +90,29 @@ export class PostService {
         }
 
         massOfPosts.sort((a, b) => a.id - b.id)
-        return massOfPosts
+        return massOfPosts 
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 
     async GetOffersByUserId(id: number): Promise<object[]> {
+        try {
         const user = await this.postRepository.findAll({ where: { userId: id }, include: [{ all: true }] })
 
         if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
-        let myoffers = []
+        const myoffers = []
         console.log(user)
 
         for (let index = 0; index < user.length; index++) {
-            let parsejson = JSON.stringify(user[index], null, 2)
+            const parsejson = JSON.stringify(user[index], null, 2)
             myoffers.push(JSON.parse(parsejson))
 
             if (!myoffers[index].Comments) continue
 
             for (let j = 0; j < myoffers[index].Comments.length; j++) {
-                let boss = await this.userRepository.findOne({
+                const boss = await this.userRepository.findOne({
                     where: { id: myoffers[index].Comments[j].userId },
                     raw: true,
                 })
@@ -105,19 +121,33 @@ export class PostService {
             }
         }
         myoffers.sort((a, b) => a.id - b.id)
-        return myoffers
+        return myoffers    
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 
     async GetGroupOffersByModule(chapter: string): Promise<object[]> {
-        const chapt = await this.chapterService.GetChupterByName(chapter)
+        try {
+           const chapt = await this.chapterService.GetChupterByName(chapter)
         if (!chapt) throw new HttpException('Обучающий модуль не найден', HttpStatus.NOT_FOUND)
         const allposts = await this.postRepository.findAll()
-        let postWithComments = await this.Offerconstruct(allposts)
-        return postWithComments
+        const postWithComments = await this.Offerconstruct(allposts)
+        return postWithComments 
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 
     async getPostBySubChapters(id: number) {
-        const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
-        return posts
+        try {
+           const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
+        return posts 
+        } catch (error) {
+            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+        
     }
 }

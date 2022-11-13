@@ -32,7 +32,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
         MailerModule.forRoot({
             transport: `smtps://${process.env.SMTP_USER}:${process.env.SMTP_PASSWORD}@${process.env.SMTP_HOST}`,
             defaults: {
-                from: '"no reply" <${process.env.SMTP_USER}>',
+                from: `"no reply" <${process.env.SMTP_USER}>`,
             },
             template: {
                 dir: __dirname + '/templates',
@@ -48,10 +48,10 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
         SequelizeModule.forRoot({
             dialect: 'postgres',
             host: process.env.DB_HOST || 'localhost',
-            port: Number(process.env.DB_PORT) ||  5432,
-            username: process.env.DB_USER ||  'postgres',
-            password: process.env.DB_PASSWORD ||  'postgres',
-            database: process.env.DB_NAME ||  'tryoop',
+            port: Number(process.env.DB_PORT) || 5432,
+            username: process.env.DB_USER || 'postgres',
+            password: process.env.DB_PASSWORD || 'postgres',
+            database: process.env.DB_NAME || 'tryoop',
             models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, FileFolder],
             autoLoadModels: true,
             sync: { force: true },

@@ -15,7 +15,7 @@ import { PostService } from './post.service'
     controllers: [PostController],
     providers: [PostService],
     imports: [
-        forwardRef(()=>ChaptersModule),
+        forwardRef(() => ChaptersModule),
         SequelizeModule.forFeature([User, UPost, Chapter]),
         FilesModule,
         UserModule,

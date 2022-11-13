@@ -23,7 +23,7 @@ import { UserService } from './user.service'
         BackupModule,
         MailModule,
         forwardRef(() => AuthModule),
-        
+
         HttpModule.register({
             timeout: 5000,
             maxRedirects: 5,

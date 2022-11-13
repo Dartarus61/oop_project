@@ -17,8 +17,8 @@ export class BackupController {
     async LogThis(@Body() dto: createPreLogDto) {
         console.log(123)
         const logdto = await this.backupService.createDto(dto)
-        console.log(logdto);
-        
+        console.log(logdto)
+
         return this.backupService.CreateLine(logdto)
     }
 }

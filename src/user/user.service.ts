@@ -55,7 +55,7 @@ export class UserService {
     async updateUser(dto: UpdateUserDto) {
         const user = await this.userRepository.findByPk(dto.id)
         if (user) {
-            let log = {
+            const log = {
                 method: 'update',
                 table_name: 'user',
                 predto: user.toJSON(),

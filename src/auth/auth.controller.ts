@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Post } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from '../user/dto/create_user.dto'
 import { ResetPassDto } from './dto/respass.dto'
@@ -26,17 +26,15 @@ export class AuthController {
         return this.AuthService.login(dto)
     }
 
-    @ApiOperation({ summary: 'Выход из аккаунта' })
-    @ApiResponse({ status: 201, type: User })
-    @Post('/logout')
-    logout(@Body('RefreshToken') token: string) {
-        return this.AuthService.logout(token)
-    }
-
     @ApiOperation({ summary: 'Сброс пароля' })
     @ApiResponse({ status: 201, type: User })
     @Post('/reset')
     ResetPass(@Body() dto: ResetPassDto) {
         return this.AuthService.reset(dto)
+    }
+
+    @Get('/refresh')
+    refresh(@Headers('authorization') authorization: string) {
+        return this.AuthService.refresh(authorization)
     }
 }
