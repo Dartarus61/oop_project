@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
-import { UPost } from 'src/post/post.model'
+import { UPost } from 'src/models/post.model'
 import { SetComment } from './dto/comment.dto'
 
 @Injectable()

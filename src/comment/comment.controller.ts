@@ -2,7 +2,7 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
-import { Comment } from './comment.model'
+import { Comment } from '../models/comment.model'
 import { CommentService } from './comment.service'
 import { SetComment } from './dto/comment.dto'
 

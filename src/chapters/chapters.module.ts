@@ -2,8 +2,8 @@ import { forwardRef, Module } from '@nestjs/common'
 import { ChaptersService } from './chapters.service'
 import { ChaptersController } from './chapters.controller'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { Chapter } from './chapter.model'
-import { UPost } from 'src/post/post.model'
+import { Chapter } from '../models/chapter.model'
+import { UPost } from 'src/models/post.model'
 import { PostModule } from 'src/post/post.module'
 
 @Module({

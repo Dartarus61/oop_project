@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import sequelize, { Op } from 'sequelize'
-import { Chapter } from './chapter.model'
+import { Chapter } from '../models/chapter.model'
 import { CreateChapterDto } from './dto/CreateChapter.dto'
 
 @Injectable()

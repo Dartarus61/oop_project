@@ -1,16 +1,16 @@
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Op } from 'sequelize'
-import { Chapter } from 'src/chapters/chapter.model'
+import { Chapter } from 'src/models/chapter.model'
 import { ChaptersService } from 'src/chapters/chapters.service'
-import { Comment } from 'src/comment/comment.model'
-import { FileFolder } from 'src/files/file.model'
+import { Comment } from 'src/models/comment.model'
+import { FileFolder } from 'src/models/file.model'
 import { FilesService } from 'src/files/files.service'
-import { User } from 'src/user/user.model'
+import { User } from 'src/models/user.model'
 import { UserService } from 'src/user/user.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { GetGroupOffers } from './dto/getGroupOffers.dto'
-import { UPost } from './post.model'
+import { UPost } from '../models/post.model'
 
 @Injectable()
 export class PostService {

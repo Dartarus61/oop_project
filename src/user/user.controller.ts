@@ -6,7 +6,7 @@ import { BackupService } from 'src/backup/backup.service'
 import { ChangeRoleDto } from './dto/ChangeRole.dto'
 import { CreateUserDto } from './dto/create_user.dto'
 import { UpdateUserDto } from './dto/UpdateUser.dto'
-import { User } from './user.model'
+import { User } from '../models/user.model'
 import { UserService } from './user.service'
 @ApiTags('Пользователи')
 @Controller('user')

@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BelongsToMany, Column, DataType, HasMany, Model, Table } from 'sequelize-typescript'
-import { UPost } from 'src/post/post.model'
-import { Role } from 'src/role/role.model'
-import { UserRoles } from 'src/role/user-roles.model'
+import { UPost } from 'src/models/post.model'
+import { Role } from 'src/models/role.model'
+import { UserRoles } from 'src/models/user-roles.model'
 
 interface UserCreationAttrs {
     email: string
     password: string
 }
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'User', timestamps:false, freezeTableName:true })
 export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
     @Column({

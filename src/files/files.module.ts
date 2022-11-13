@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { FileFolder } from './file.model'
+import { FileFolder } from '../models/file.model'
 import { FilesService } from './files.service'
 
 @Module({

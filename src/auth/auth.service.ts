@@ -4,7 +4,7 @@ import { UserService } from 'src/user/user.service'
 import { CreateUserDto } from '../user/dto/create_user.dto'
 import { ResetPassDto } from './dto/respass.dto'
 import * as bcrypt from 'bcrypt'
-import { User } from 'src/user/user.model'
+import { User } from 'src/models/user.model'
 import { LoginDto } from './dto/login.dto'
 import { TokenService } from 'src/token/token.service'
 import { OutputUserDto } from './dto/outputUser.dto'
@@ -25,6 +25,7 @@ export class AuthService {
             }
             const hashPassword = await bcrypt.hash(userDto.password, 5)
             const user = await this.userService.createUser({ ...userDto, password: hashPassword })
+            
             return this.generateToken(user)
         } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
@@ -64,10 +65,12 @@ export class AuthService {
         try {
             const user = await this.validateUser(userDto)
             return this.generateToken(user)
-        } catch (error) {
+        }
+        catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
         }
     }
+    
 
     async reset(dto: ResetPassDto) {
         try {

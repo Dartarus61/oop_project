@@ -4,7 +4,7 @@ import { CreateUserDto } from '../user/dto/create_user.dto'
 import { ResetPassDto } from './dto/respass.dto'
 import { LoginDto } from './dto/login.dto'
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { User } from 'src/user/user.model'
+import { User } from 'src/models/user.model'
 
 @ApiBearerAuth('JWT')
 @ApiTags('Авторизация')

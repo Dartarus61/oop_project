@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
-import { UPost } from 'src/post/post.model'
+import { UPost } from 'src/models/post.model'
 
-@Table({ tableName: 'chapter' })
+@Table({ tableName: 'Chapter', timestamps:false, freezeTableName:true })
 export class Chapter extends Model<Chapter> {
     @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({

@@ -10,17 +10,17 @@ import {
     Model,
     Table,
 } from 'sequelize-typescript'
-import { Chapter } from 'src/chapters/chapter.model'
-import { Comment } from 'src/comment/comment.model'
-import { FileFolder } from 'src/files/file.model'
-import { User } from 'src/user/user.model'
+import { Chapter } from 'src/models/chapter.model'
+import { Comment } from 'src/models/comment.model'
+import { FileFolder } from 'src/models/file.model'
+import { User } from 'src/models/user.model'
 
 interface PostCreationAttrs {
     description: string
     title: string
 }
 
-@Table({ tableName: 'posts' })
+@Table({ tableName: 'Post', timestamps:false, freezeTableName:true  })
 export class UPost extends Model<UPost, PostCreationAttrs> {
     @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({

@@ -15,7 +15,7 @@ import { Roles } from 'src/auth/roles-auth.decorator'
 import { CreatePostDto } from './dto/create-post.dto'
 import { GetGroupOffers } from './dto/getGroupOffers.dto'
 import { PostService } from './post.service'
-import { UPost } from './post.model'
+import { UPost } from '../models/post.model'
 import { FilesService } from 'src/files/files.service'
 import { RolesGuard } from 'src/auth/roles.guard'
 

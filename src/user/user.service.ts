@@ -9,7 +9,7 @@ import { RoleService } from 'src/role/role.service'
 import { ChangeRoleDto } from './dto/ChangeRole.dto'
 import { CreateUserDto } from './dto/create_user.dto'
 import { UpdateUserDto } from './dto/UpdateUser.dto'
-import { User } from './user.model'
+import { User } from '../models/user.model'
 import * as uuid from 'uuid'
 import { MailService } from 'src/mail/mail.service'
 
@@ -31,7 +31,7 @@ export class UserService {
         user.roles = [role]
         const acticationLink = uuid.v4()
         await user.update({ acticationLink })
-        //this.mailService.sendActivation(user.email,user.acticationLink)
+        this.mailService.sendActivation(user.email,user.acticationLink)
 
         //this.create(log)
         //this.backupService.CreateLine(await this.backupService.createDto(log))

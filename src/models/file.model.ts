@@ -1,7 +1,7 @@
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
-import { UPost } from 'src/post/post.model'
+import { UPost } from 'src/models/post.model'
 
-@Table({ tableName: 'file' })
+@Table({ tableName: 'File', timestamps:false, freezeTableName:true  })
 export class FileFolder extends Model<FileFolder> {
     @Column({
         type: DataType.INTEGER,

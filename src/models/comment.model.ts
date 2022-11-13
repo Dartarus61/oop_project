@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
-import { UPost } from 'src/post/post.model'
-import { User } from 'src/user/user.model'
+import { UPost } from 'src/models/post.model'
+import { User } from 'src/models/user.model'
 
 interface PostCreationAttrs {
     description: string
@@ -10,7 +10,7 @@ interface PostCreationAttrs {
     filePath: string
 }
 
-@Table({ tableName: 'comments' })
+@Table({ tableName: 'Comment', timestamps:false, freezeTableName:true })
 export class Comment extends Model<Comment> {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
     @Column({
