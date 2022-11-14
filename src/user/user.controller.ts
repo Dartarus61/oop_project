@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -61,5 +61,10 @@ export class UserController {
     @Get('/all')
     AllPeople() {
         return this.UserService.getAll()
+    }
+
+    @Get('/profile')
+    refresh(@Headers('authorization') authorization: string) {
+        return this.UserService.GetMyProfile(authorization)
     }
 }

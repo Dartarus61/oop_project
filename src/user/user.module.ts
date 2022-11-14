@@ -12,6 +12,8 @@ import { UserRoles } from 'src/models/user-roles.model'
 import { UserController } from './user.controller'
 import { User } from '../models/user.model'
 import { UserService } from './user.service'
+import { TokenModule } from 'src/token/token.module'
+import { CommentModule } from 'src/comment/comment.module'
 
 @Module({
     controllers: [UserController],
@@ -28,6 +30,8 @@ import { UserService } from './user.service'
             timeout: 5000,
             maxRedirects: 5,
         }),
+        TokenModule,
+        CommentModule,
     ],
 })
 export class UserModule {}

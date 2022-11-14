@@ -10,5 +10,6 @@ import { JwtModule } from '@nestjs/jwt'
     providers: [CommentService],
     controllers: [CommentController],
     imports: [SequelizeModule.forFeature([Comment, UPost]), JwtModule],
+    exports: [CommentService],
 })
 export class CommentModule {}
