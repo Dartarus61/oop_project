@@ -16,4 +16,7 @@ export class CreateUserDto {
     @ApiProperty({ example: 'Clemente', description: 'Фамилия пользователя' })
     @IsString({ message: 'Должно быть строкой' })
     readonly surname: string
+    @ApiProperty({ example: 'sjkdh-biusdh-fg132a-sdf', description: 'uuid activation link' })
+    @IsString({ message: 'Должно быть строкой' })
+    readonly acticationLink: string
 }

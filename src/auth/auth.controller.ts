@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Headers, Post } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from '../user/dto/create_user.dto'
-import { ResetPassDto } from './dto/respass.dto'
+import { SwitchPassDto } from './dto/switchPass.dto'
 import { LoginDto } from './dto/login.dto'
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { User } from 'src/models/user.model'
+import { newPassDto } from './dto/newPass.dto'
 
 @ApiBearerAuth('JWT')
 @ApiTags('Авторизация')
@@ -26,15 +27,23 @@ export class AuthController {
         return this.AuthService.login(dto)
     }
 
-    @ApiOperation({ summary: 'Сброс пароля' })
-    @ApiResponse({ status: 201, type: User })
-    @Post('/reset')
-    ResetPass(@Body() dto: ResetPassDto) {
-        return this.AuthService.reset(dto)
-    }
-
     @Get('/refresh')
     refresh(@Headers('authorization') authorization: string) {
         return this.AuthService.refresh(authorization)
+    }
+
+    @Post('/switchPassword')
+    SwitchPass(@Body() dto: SwitchPassDto) {
+        return this.AuthService.switchPass(dto)
+    }
+
+    @Post('/forgotPassword')
+    ForgotPass(@Body('email') email: string) {
+        return this.AuthService.forgotPass(email)
+    }
+
+    @Post('/newPass')
+    NewPass(@Body() dto: newPassDto) {
+        return this.AuthService.newPass(dto)
     }
 }

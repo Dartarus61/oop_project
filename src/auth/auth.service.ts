@@ -2,19 +2,23 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { JwtService } from '@nestjs/jwt'
 import { UserService } from 'src/user/user.service'
 import { CreateUserDto } from '../user/dto/create_user.dto'
-import { ResetPassDto } from './dto/respass.dto'
+import { SwitchPassDto } from './dto/switchPass.dto'
 import * as bcrypt from 'bcrypt'
 import { User } from 'src/models/user.model'
 import { LoginDto } from './dto/login.dto'
 import { TokenService } from 'src/token/token.service'
 import { OutputUserDto } from './dto/outputUser.dto'
+import { MailService } from 'src/mail/mail.service'
+import * as uuid from 'uuid'
+import { newPassDto } from './dto/newPass.dto'
 
 @Injectable()
 export class AuthService {
     constructor(
         private userService: UserService,
         private jwtService: JwtService,
-        private readonly tokenService: TokenService
+        private readonly tokenService: TokenService,
+        private mailService: MailService
     ) {}
 
     async registration(userDto: CreateUserDto) {
@@ -24,8 +28,11 @@ export class AuthService {
                 throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
             }
             const hashPassword = await bcrypt.hash(userDto.password, 5)
-            const user = await this.userService.createUser({ ...userDto, password: hashPassword })
-            
+            const acticationLink = uuid.v4()
+            const user = await this.userService.createUser({ ...userDto, password: hashPassword, acticationLink })
+
+            this.mailService.sendActivation(user.email, user.acticationLink)
+
             return this.generateToken(user)
         } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
@@ -65,46 +72,87 @@ export class AuthService {
         try {
             const user = await this.validateUser(userDto)
             return this.generateToken(user)
-        }
-        catch (error) {
+        } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
         }
     }
-    
 
-    async reset(dto: ResetPassDto) {
-        try {
-            const user = await this.userService.getUserByEmail(dto.email)
-            if (!user) throw new HttpException('Пользователь с таким емаил не найден', HttpStatus.BAD_REQUEST)
+    async switchPass(dto: SwitchPassDto) {
+        const user = await this.userService.getUserById(dto.id)
 
-            const isPasswordEquals = await bcrypt.compare(dto.newpass, user.password)
-            if (isPasswordEquals) throw new HttpException('Пароли не должны совпадать', HttpStatus.UNAUTHORIZED)
-            const NewPass = await bcrypt.hash(dto.newpass, 3)
-            await user.update({ password: NewPass })
-            return 'Пароль сменен'
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        const isPassEquils = await bcrypt.compare(dto.password, user.password)
+
+        if (!isPassEquils) {
+            throw new HttpException('Неверный старый пароль', HttpStatus.BAD_REQUEST)
+        }
+
+        const isNewPassEquils = await bcrypt.compare(dto.newPassword, user.password)
+
+        if (isNewPassEquils) {
+            throw new HttpException('Новый пароль не может совпадать со старым', HttpStatus.BAD_REQUEST)
+        }
+
+        const hashPassword = await bcrypt.hash(dto.newPassword, 3)
+        await user.update({ password: hashPassword })
+
+        const userDto = new OutputUserDto(user)
+        const tokens = this.generateToken(user)
+
+        return {
+            ...tokens,
+            user: userDto,
+        }
+    }
+
+    async forgotPass(email: string) {
+        const user = await this.userService.getUserByEmail(email)
+        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+        const key = `f${(~~(Math.random() * 1e8)).toString(16)}`
+        await user.update({ switchKey: key })
+        await this.mailService.sendSwitchPasswordCodeMail(email, key)
+
+        return
+    }
+
+    async newPass(dto: newPassDto) {
+        const user = await this.userService.getUserByEmail(dto.email)
+        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+
+        if (user.switchKey != dto.code) {
+            throw new HttpException('Неверный код', HttpStatus.BAD_REQUEST)
+        }
+
+        user.switchKey = null
+        const hashPassword = await bcrypt.hash(dto.newPass, 3)
+
+        await user.update({ password: hashPassword })
+
+        const userDto = new OutputUserDto(user)
+        const tokens = this.generateToken(user)
+
+        return {
+            ...tokens,
+            user: userDto,
         }
     }
 
     async refresh(authorization: string) {
         try {
-           const decoded = await this.tokenService.getDataFromToken(authorization)
+            const decoded = await this.tokenService.getDataFromToken(authorization)
 
-        const user = await this.userService.getUserById(decoded.id)
-        if (user.isActivated != decoded.isActivated) {
-            decoded.isActivated = user.isActivated
-        }
+            const user = await this.userService.getUserById(decoded.id)
+            if (user.isActivated != decoded.isActivated) {
+                decoded.isActivated = user.isActivated
+            }
 
-        return {
-            token: authorization.split(' ')[1],
-            user: {
-                ...new OutputUserDto(decoded),
-            },
-        } 
+            return {
+                token: authorization.split(' ')[1],
+                user: {
+                    ...new OutputUserDto(decoded),
+                },
+            }
         } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
         }
-        
     }
 }

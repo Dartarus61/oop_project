@@ -9,7 +9,7 @@ interface UserCreationAttrs {
     password: string
 }
 
-@Table({ tableName: 'User', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'User', timestamps: false, freezeTableName: true })
 export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
     @Column({
@@ -41,6 +41,9 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @Column({ type: DataType.STRING, allowNull: true })
     acticationLink: string
+
+    @Column({ type: DataType.STRING, allowNull: true })
+    switchKey: string
 
     @ApiProperty({ example: '[USER]', description: 'Роли пользователя' })
     @BelongsToMany(() => Role, () => UserRoles)

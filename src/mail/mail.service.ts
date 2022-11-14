@@ -30,4 +30,19 @@ export class MailService {
                 throw new HttpException('Ошибка отправления сообщения', HttpStatus.BAD_REQUEST)
             })
     }
+
+    async sendSwitchPasswordCodeMail(email: string, key: string) {
+        await this.mailerService.sendMail({
+            from: process.env.SMTP_USER,
+            to: `${email}`,
+            subject: 'Код для смены пароля',
+            text: '',
+            html: `
+                <div>
+                    <h1>Код для смены пароля</h1>
+                    <p>${key}</p>
+                </div>
+                `,
+        })
+    }
 }
