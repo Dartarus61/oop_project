@@ -75,6 +75,10 @@ export class UserService {
         await this.userRepository.destroy({ where: { id: user.id } })
     }
 
+    async getUserByCode(code: string ) {
+        return this.userRepository.findOne({where: {switchKey: code}})
+    }
+
     async activate(value: string) {
         const user = await this.userRepository.findOne({ where: { acticationLink: value } })
         if (user) {

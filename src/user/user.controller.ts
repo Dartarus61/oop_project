@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Param, Post, Redirect, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -23,8 +23,10 @@ export class UserController {
     }
 
     @Get('/activ/:value')
-    activation(@Param('value') value: string) {
-        return this.UserService.activate(value)
+    @Redirect('http://localhost:3000/login')
+    async activation(@Param('value') value: string) {
+        const fuser = await this.UserService.activate(value)
+        return {url: 'http://localhost:3000/myProfile'}
     }
 
     @ApiOperation({ summary: 'Поиск пользователя по почте' })
