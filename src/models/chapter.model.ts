@@ -20,7 +20,7 @@ export class Chapter extends Model<Chapter> {
     @Column({ type: DataType.INTEGER, allowNull: true })
     idParent: number
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: true })
     path: string
 
     @HasMany(() => UPost)

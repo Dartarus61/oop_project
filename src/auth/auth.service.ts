@@ -101,11 +101,7 @@ export class AuthService {
 
     async newPass(dto: newPassDto) {
         const user = await this.userService.getUserByCode(dto.code)
-        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
-
-        if (user.switchKey != dto.code) {
-            throw new HttpException('Неверный код', HttpStatus.BAD_REQUEST)
-        }
+        if (!user) throw new HttpException('Неверный код', HttpStatus.NOT_FOUND)
 
         user.switchKey = null
         const hashPassword = await bcrypt.hash(dto.newPass, 3)
@@ -113,7 +109,7 @@ export class AuthService {
         await user.update({ password: hashPassword,switchKey:null })
 
         const userDto = new OutputUserDto(user)
-        const tokens = this.generateToken(user)
+        const tokens = await this.generateToken(user)
 
         return {
             ...tokens,

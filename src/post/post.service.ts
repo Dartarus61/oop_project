@@ -40,11 +40,13 @@ export class PostService {
             }
             const nameingOfTXT = await this.fileService.createFile(dto.description)
             await post.$add('files', nameingOfTXT)
+            console.log('file was written successfuly');
+            
             return post
         }
         throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+            throw error
         }
         
     }
@@ -63,7 +65,7 @@ export class PostService {
         }
         throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+            throw error
         }
         
     }
@@ -93,39 +95,14 @@ export class PostService {
         massOfPosts.sort((a, b) => a.id - b.id)
         return massOfPosts 
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+            throw error
         }
         
     }
 
     async GetOffersByUserId(id: number): Promise<object[]> {
-        try {
-        const user = await this.postRepository.findAll({ where: { userId: id }, include: [{ all: true }] })
-
-        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
-        const myoffers = []
-        console.log(user)
-
-        for (let index = 0; index < user.length; index++) {
-            const parsejson = JSON.stringify(user[index], null, 2)
-            myoffers.push(JSON.parse(parsejson))
-
-            if (!myoffers[index].Comments) continue
-
-            for (let j = 0; j < myoffers[index].Comments.length; j++) {
-                const boss = await this.userRepository.findOne({
-                    where: { id: myoffers[index].Comments[j].userId },
-                    raw: true,
-                })
-
-                myoffers[index].Comments[j].Name = boss.name + ' ' + boss.surname
-            }
-        }
-        myoffers.sort((a, b) => a.id - b.id)
-        return myoffers    
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
-        }
+        const posts = await this.postRepository.findAll({where:{userId:id},include:{all:true}})
+        return posts
         
     }
 
@@ -137,7 +114,7 @@ export class PostService {
         const postWithComments = await this.Offerconstruct(allposts)
         return postWithComments 
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+            throw error
         }
         
     }
@@ -147,13 +124,15 @@ export class PostService {
            const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
         return posts 
         } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+            throw error
         }
         
     }
 
     async getCountPostByid(id: number) {
-        return (await this.postRepository.findAndCountAll({where:{userId:id}})).count
+        const count = await this.postRepository.findAndCountAll({where:{userId:id}})
+        console.log(count);
         
+        return count.count        
     }
 }

@@ -100,6 +100,9 @@ export class UserService {
         userObject.commentCount=countUsersComments;
         userObject.postCount=countUsersPosts;
         console.log(userObject);
+        const posts = await this.postService.GetOffersByUserId(decoded.id)
+        console.log(posts);
+        
         
 
     }
