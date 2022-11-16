@@ -22,7 +22,6 @@ export class AuthService {
     ) {}
 
     async registration(userDto: CreateUserDto) {
-        try {
             const candidate = await this.userService.getUserByEmail(userDto.email)
             if (candidate) {
                 throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
@@ -34,13 +33,9 @@ export class AuthService {
             this.mailService.sendActivation(user.email, user.acticationLink)
 
             return this.generateToken(user)
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
-        }
     }
 
     private async generateToken(user: User) {
-        try {
             const payload = { email: user.email, id: user.id, roles: user.roles }
             return {
                 token: this.jwtService.sign(payload, { secret: process.env.PRIVATE_KEY }),
@@ -50,31 +45,21 @@ export class AuthService {
                     isActivated: user.isActivated,
                 },
             }
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
-        }
     }
 
     private async validateUser(userDto: LoginDto) {
-        try {
             const user = await this.userService.getUserByEmail(userDto.email)
+            if (!user) throw new HttpException('User not found',HttpStatus.NOT_FOUND)
             const isPasswordEquals = await bcrypt.compare(userDto.password, user.password)
             if (user && isPasswordEquals) {
                 return user
             }
             throw new UnauthorizedException({ message: 'Некорректный емайл или пароль' })
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
-        }
     }
 
     async login(userDto: LoginDto) {
-        try {
-            const user = await this.validateUser(userDto)
-            return this.generateToken(user)
-        } catch (error) {
-            throw new HttpException(error, HttpStatus.BAD_GATEWAY)
-        }
+        const user = await this.validateUser(userDto)
+        return this.generateToken(user)
     }
 
     async switchPass(dto: SwitchPassDto) {

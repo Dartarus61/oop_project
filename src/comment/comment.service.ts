@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
+import { Comment } from 'src/models/comment.model'
 import { UPost } from 'src/models/post.model'
 import { SetComment } from './dto/comment.dto'
 
 @Injectable()
 export class CommentService {
-    constructor(@InjectModel(UPost) private postRepository: typeof UPost) {}
+    constructor(@InjectModel(UPost) private postRepository: typeof UPost,
+    @InjectModel(Comment) private commentRepository: typeof Comment) {}
 
     async setComment(dto: SetComment) {
         const NewComment = await this.postRepository.findOne({ where: { id: dto.postId } })
         await NewComment.$create('comments', { description: dto.ctx, userId: dto.userId })
         return NewComment
+    }
+
+    async getCountById(id: number) {
+        const count = await this.commentRepository.findAndCountAll({where:{userId:id}})
+        if (!count) return 0
+        return count.count
     }
 }

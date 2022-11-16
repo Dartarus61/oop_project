@@ -16,7 +16,8 @@ export class UserService {
         private userRepository: typeof User,
         private roleService: RoleService,
         private tokenService: TokenService,
-        private commentService: CommentService
+        private commentService: CommentService,
+        /* private postService: PostService */
     ) {}
 
     async createUser(dto: CreateUserDto) {
@@ -90,6 +91,13 @@ export class UserService {
 
     async GetMyProfile(authorization: string) {
         const decoded = await this.tokenService.getDataFromToken(authorization)
-        console.log(decoded)
+        delete decoded.iat
+        delete decoded.exp
+        let userObject = {...decoded}
+        const countUsersComments = await this.commentService.getCountById(decoded.id)
+        userObject.commentCount=countUsersComments;
+        console.log(userObject);
+        
+
     }
 }
