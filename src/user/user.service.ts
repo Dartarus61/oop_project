@@ -17,7 +17,8 @@ export class UserService {
         private roleService: RoleService,
         private tokenService: TokenService,
         private commentService: CommentService,
-        /* private postService: PostService */
+        @Inject(forwardRef(() => PostService))
+        private postService: PostService
     ) {}
 
     async createUser(dto: CreateUserDto) {
@@ -94,8 +95,10 @@ export class UserService {
         delete decoded.iat
         delete decoded.exp
         let userObject = {...decoded}
+        const countUsersPosts = await this.postService.getCountPostByid(decoded.id);
         const countUsersComments = await this.commentService.getCountById(decoded.id)
         userObject.commentCount=countUsersComments;
+        userObject.postCount=countUsersPosts;
         console.log(userObject);
         
 

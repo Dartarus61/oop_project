@@ -14,6 +14,7 @@ import { User } from '../models/user.model'
 import { UserService } from './user.service'
 import { TokenModule } from 'src/token/token.module'
 import { CommentModule } from 'src/comment/comment.module'
+import { PostModule } from 'src/post/post.module'
 
 @Module({
     controllers: [UserController],
@@ -25,7 +26,7 @@ import { CommentModule } from 'src/comment/comment.module'
         BackupModule,
         MailModule,
         forwardRef(() => AuthModule),
-
+        forwardRef(()=>PostModule),
         HttpModule.register({
             timeout: 5000,
             maxRedirects: 5,

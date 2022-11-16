@@ -1,4 +1,4 @@
-import { HttpException, Injectable, HttpStatus } from '@nestjs/common'
+import { HttpException, Injectable, HttpStatus, Inject, forwardRef } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Op } from 'sequelize'
 import { Chapter } from 'src/models/chapter.model'
@@ -17,6 +17,7 @@ export class PostService {
     constructor(
         @InjectModel(UPost) private postRepository: typeof UPost,
         @InjectModel(User) private userRepository: typeof User,
+        @Inject(forwardRef(() => UserService))
         private userService: UserService,
         private fileService: FilesService,
         private chapterService: ChaptersService
@@ -148,6 +149,11 @@ export class PostService {
         } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
         }
+        
+    }
+
+    async getCountPostByid(id: number) {
+        return (await this.postRepository.findAndCountAll({where:{userId:id}})).count
         
     }
 }

@@ -18,7 +18,8 @@ import { PostService } from './post.service'
         forwardRef(() => ChaptersModule),
         SequelizeModule.forFeature([User, UPost, Chapter]),
         FilesModule,
-        UserModule,
+        forwardRef(()=>UserModule),
+        
         JwtModule,
         AuthModule,
     ],
