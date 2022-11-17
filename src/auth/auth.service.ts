@@ -22,39 +22,39 @@ export class AuthService {
     ) {}
 
     async registration(userDto: CreateUserDto) {
-            const candidate = await this.userService.getUserByEmail(userDto.email)
-            if (candidate) {
-                throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
-            }
-            const hashPassword = await bcrypt.hash(userDto.password, 5)
-            const acticationLink = uuid.v4()
-            const user = await this.userService.createUser({ ...userDto, password: hashPassword, acticationLink })
+        const candidate = await this.userService.getUserByEmail(userDto.email)
+        if (candidate) {
+            throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
+        }
+        const hashPassword = await bcrypt.hash(userDto.password, 5)
+        const acticationLink = uuid.v4()
+        const user = await this.userService.createUser({ ...userDto, password: hashPassword, acticationLink })
 
-            this.mailService.sendActivation(user.email, user.acticationLink)
+        this.mailService.sendActivation(user.email, user.acticationLink)
 
-            return this.generateToken(user)
+        return this.generateToken(user)
     }
 
     private async generateToken(user: User) {
-            const payload = { email: user.email, id: user.id, roles: user.roles }
-            return {
-                token: this.jwtService.sign(payload, { secret: process.env.PRIVATE_KEY }),
-                user: {
-                    id: user.id,
-                    email: user.email,
-                    isActivated: user.isActivated,
-                },
-            }
+        const payload = { email: user.email, id: user.id, roles: user.roles, name: user.name, surname: user.surname }
+        return {
+            token: this.jwtService.sign(payload, { secret: process.env.PRIVATE_KEY }),
+            user: {
+                id: user.id,
+                email: user.email,
+                isActivated: user.isActivated,
+            },
+        }
     }
 
     private async validateUser(userDto: LoginDto) {
-            const user = await this.userService.getUserByEmail(userDto.email)
-            if (!user) throw new HttpException('User not found',HttpStatus.NOT_FOUND)
-            const isPasswordEquals = await bcrypt.compare(userDto.password, user.password)
-            if (user && isPasswordEquals) {
-                return user
-            }
-            throw new UnauthorizedException({ message: 'Некорректный емайл или пароль' })
+        const user = await this.userService.getUserByEmail(userDto.email)
+        if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+        const isPasswordEquals = await bcrypt.compare(userDto.password, user.password)
+        if (user && isPasswordEquals) {
+            return user
+        }
+        throw new UnauthorizedException({ message: 'Некорректный емайл или пароль' })
     }
 
     async login(userDto: LoginDto) {
@@ -106,7 +106,7 @@ export class AuthService {
         user.switchKey = null
         const hashPassword = await bcrypt.hash(dto.newPass, 3)
 
-        await user.update({ password: hashPassword,switchKey:null })
+        await user.update({ password: hashPassword, switchKey: null })
 
         const userDto = new OutputUserDto(user)
         const tokens = await this.generateToken(user)

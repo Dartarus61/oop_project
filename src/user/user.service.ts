@@ -77,8 +77,8 @@ export class UserService {
         await this.userRepository.destroy({ where: { id: user.id } })
     }
 
-    async getUserByCode(code: string ) {
-        return this.userRepository.findOne({where: {switchKey: code}})
+    async getUserByCode(code: string) {
+        return this.userRepository.findOne({ where: { switchKey: code } })
     }
 
     async activate(value: string) {
@@ -94,15 +94,14 @@ export class UserService {
         const decoded = await this.tokenService.getDataFromToken(authorization)
         delete decoded.iat
         delete decoded.exp
-        let userObject = {...decoded}
-        const countUsersPosts = await this.postService.getCountPostByid(decoded.id);
-        const countUsersComments = await this.commentService.getCountByUserId(decoded.id)
-        userObject.commentCount=countUsersComments;
-        userObject.postCount=countUsersPosts;
-        console.log(userObject);
-        const posts = await this.postService.GetOffersByUserId(decoded.id)
-        
-        
-
+        let userObject = { ...decoded }
+        userObject.roles = userObject.roles.map((el) => {
+            return el.value
+        })
+        userObject.commentCount = await this.commentService.getCountByUserId(decoded.id)
+        userObject.postCount = await this.postService.getCountPostByid(decoded.id)
+        userObject.posts = await this.postService.GetOffersByUserId(decoded.id)
+        console.log({ user: userObject })
+        return userObject
     }
 }

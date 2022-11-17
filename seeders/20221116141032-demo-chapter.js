@@ -13,6 +13,7 @@ module.exports = {
                 {
                     name: 'JavaFX',
                     idParent: 1,
+                    path: 'Java.JavaFX',
                 },
             ],
             {}

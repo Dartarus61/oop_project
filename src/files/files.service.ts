@@ -21,7 +21,6 @@ export class FilesService {
                 let fileName = ''
                 for (let index = 0; index < file.length; index++) {
                     fileName = uuid.v4() + '.jpg'
-                    console.log(fileName)
 
                     fs.writeFileSync(path.join(filePath, fileName), file[index].buffer)
                     masReturn.push(fileName)
@@ -48,7 +47,13 @@ export class FilesService {
         return ArrOfObjectByFiles
     }
 
-    async GetFileToUser(name: string) {
-        //TODO:сделать выгрузку файлов(картинок) в контексте всей статьи. уточнить у Алексея, если забуду
+    GetDataByFilesData(fileData) {
+        if (fileData.nameOfContent.split('.')[1] === 'txt') {
+            let data = fs.readFileSync(path.resolve(fileData.contentPath, fileData.nameOfContent)).toString('utf-8')
+            return data
+        } else {
+            let data = fs.readFileSync(path.resolve(fileData.contentPath, fileData.nameOfContent))
+            return data
+        }
     }
 }

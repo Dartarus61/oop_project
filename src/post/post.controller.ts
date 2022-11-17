@@ -31,8 +31,6 @@ export class PostController {
     @Post('/create')
     @UseInterceptors(AnyFilesInterceptor())
     createPost(@Body() dto: CreatePostDto, @UploadedFiles() files?: Array<Express.Multer.File>) {
-        console.log(files)
-
         return this.postService.createPost(dto, files)
 
         // return this.postService.CreateSimpePost(dto)
@@ -45,10 +43,5 @@ export class PostController {
     @Post('/getoff')
     GetOffers(@Body('id') id: number) {
         return this.postService.GetOffersByUserId(id)
-    }
-
-    @Get('/download')
-    GetFiles(@Query('filename') name: string) {
-        return this.fileService.GetFileToUser(name)
     }
 }
