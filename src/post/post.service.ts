@@ -11,6 +11,7 @@ import { UserService } from 'src/user/user.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { GetGroupOffers } from './dto/getGroupOffers.dto'
 import { UPost } from '../models/post.model'
+import { CommentService } from 'src/comment/comment.service'
 
 @Injectable()
 export class PostService {
@@ -19,6 +20,8 @@ export class PostService {
         @InjectModel(User) private userRepository: typeof User,
         @Inject(forwardRef(() => UserService))
         private userService: UserService,
+        @Inject(forwardRef(() => CommentService))
+        private commentService: CommentService, 
         private fileService: FilesService,
         private chapterService: ChaptersService
     ) {}
@@ -102,7 +105,19 @@ export class PostService {
 
     async GetOffersByUserId(id: number): Promise<object[]> {
         const posts = await this.postRepository.findAll({where:{userId:id},include:{all:true}})
-        return posts
+        const tempPosts = JSON.stringify(posts,null,2);
+        const final = JSON.parse(tempPosts)
+        const result = await Promise.all(final.map(async (el) => {
+            delete el.chapter
+            delete el.comments
+            el.author = `${el.author.name} ${el.author.surname}`
+            const commentCount = await this.commentService.getCountByPostId(el.id)
+            el.comments=commentCount.count;
+            return el
+        }))
+        console.log(result);
+
+        return final
         
     }
 

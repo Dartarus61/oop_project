@@ -20,7 +20,7 @@ interface PostCreationAttrs {
     title: string
 }
 
-@Table({ tableName: 'Post', timestamps:false, freezeTableName:true  })
+@Table({ tableName: 'Post', timestamps:true, freezeTableName:true  })
 export class UPost extends Model<UPost, PostCreationAttrs> {
     @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({

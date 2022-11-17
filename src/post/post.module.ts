@@ -10,6 +10,7 @@ import { UserModule } from 'src/user/user.module'
 import { PostController } from './post.controller'
 import { UPost } from '../models/post.model'
 import { PostService } from './post.service'
+import { CommentModule } from 'src/comment/comment.module'
 
 @Module({
     controllers: [PostController],
@@ -19,7 +20,7 @@ import { PostService } from './post.service'
         SequelizeModule.forFeature([User, UPost, Chapter]),
         FilesModule,
         forwardRef(()=>UserModule),
-        
+        forwardRef(()=>CommentModule),
         JwtModule,
         AuthModule,
     ],

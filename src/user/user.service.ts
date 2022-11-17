@@ -96,12 +96,11 @@ export class UserService {
         delete decoded.exp
         let userObject = {...decoded}
         const countUsersPosts = await this.postService.getCountPostByid(decoded.id);
-        const countUsersComments = await this.commentService.getCountById(decoded.id)
+        const countUsersComments = await this.commentService.getCountByUserId(decoded.id)
         userObject.commentCount=countUsersComments;
         userObject.postCount=countUsersPosts;
         console.log(userObject);
         const posts = await this.postService.GetOffersByUserId(decoded.id)
-        console.log(posts);
         
         
 

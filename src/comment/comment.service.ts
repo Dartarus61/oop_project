@@ -15,9 +15,11 @@ export class CommentService {
         return NewComment
     }
 
-    async getCountById(id: number) {
-        const count = await this.commentRepository.findAndCountAll({where:{userId:id}})
-        if (!count) return 0
-        return count.count
+    async getCountByUserId(id: number) {
+        return (await this.commentRepository.findAndCountAll({where:{userId:id}})).count
+    }
+
+    async getCountByPostId(id: number) {
+        return this.commentRepository.findAndCountAll({where:{postId:id}})
     }
 }
