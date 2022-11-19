@@ -44,6 +44,7 @@ export class AuthService {
                 id: user.id,
                 email: user.email,
                 isActivated: user.isActivated,
+                roles: user.roles,
             },
         }
     }
@@ -141,7 +142,7 @@ export class AuthService {
         const user = await this.userService.getUserById(dto.id)
         if (user) {
             delete dto.id
-            const newData = await this.userService.updateUser(dto,user)
+            const newData = await this.userService.updateUser(dto, user)
             return this.generateToken(newData)
         }
     }
