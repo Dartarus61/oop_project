@@ -8,6 +8,7 @@ import { User } from '../models/user.model'
 import { TokenService } from 'src/token/token.service'
 import { PostService } from 'src/post/post.service'
 import { CommentService } from 'src/comment/comment.service'
+import { profileUserDto } from './dto/profileUser.dto'
 
 @Injectable()
 export class UserService {
@@ -43,19 +44,11 @@ export class UserService {
         return users
     }
 
-    async updateUser(dto: UpdateUserDto) {
-        const user = await this.userRepository.findByPk(dto.id)
-        if (user) {
-            const log = {
-                method: 'update',
-                table_name: 'user',
-                predto: user.toJSON(),
-            }
-            //this.backupService.CreateLine(await this.backupService.createDto(log))
-            delete dto.id
-            await user.update({ ...dto })
-            return user
-        }
+    async updateUser(dto: UpdateUserDto, user:User) {
+
+        await user.update({ ...dto })
+        return user
+        
     }
 
     async getUserByEmail(email: string) {
@@ -94,7 +87,10 @@ export class UserService {
         const decoded = await this.tokenService.getDataFromToken(authorization)
         delete decoded.iat
         delete decoded.exp
-        let userObject = { ...decoded }
+
+        let userProfileData = await this.getUserById(decoded.id)
+
+        let userObject = { ...decoded, name: userProfileData.name, surname: userProfileData.surname}
         userObject.roles = userObject.roles.map((el) => {
             return el.value
         })
