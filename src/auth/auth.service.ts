@@ -11,6 +11,7 @@ import { OutputUserDto } from './dto/outputUser.dto'
 import { MailService } from 'src/mail/mail.service'
 import * as uuid from 'uuid'
 import { newPassDto } from './dto/newPass.dto'
+import { UpdateUserDto } from 'src/user/dto/UpdateUser.dto'
 
 @Injectable()
 export class AuthService {
@@ -133,6 +134,15 @@ export class AuthService {
             }
         } catch (error) {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
+        }
+    }
+
+    async updateUser(dto: UpdateUserDto) {
+        const user = await this.userService.getUserById(dto.id)
+        if (user) {
+            delete dto.id
+            const newData = await this.userService.updateUser(dto,user)
+            return this.generateToken(newData)
         }
     }
 }

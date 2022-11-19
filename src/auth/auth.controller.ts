@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Post, Put } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from '../user/dto/create_user.dto'
 import { SwitchPassDto } from './dto/switchPass.dto'
@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto'
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { User } from 'src/models/user.model'
 import { newPassDto } from './dto/newPass.dto'
+import { UpdateUserDto } from 'src/user/dto/UpdateUser.dto'
 
 @ApiBearerAuth('JWT')
 @ApiTags('Авторизация')
@@ -45,5 +46,12 @@ export class AuthController {
     @Post('/newPass')
     NewPass(@Body() dto: newPassDto) {
         return this.AuthService.newPass(dto)
+    }
+
+    @ApiOperation({ summary: 'Изменение данных пользователя' })
+    @ApiResponse({ status: 200, type: User })
+    @Put('/updata')
+    ChangeData(@Body() dto: UpdateUserDto) {
+        return this.AuthService.updateUser(dto)
     }
 }

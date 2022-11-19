@@ -47,14 +47,7 @@ export class UserController {
         return this.UserService.addRole(dto)
     }
 
-    @ApiOperation({ summary: 'Изменение данных пользователя' })
-    @ApiResponse({ status: 200, type: User })
-    @UseGuards(RolesGuard)
-    @Roles('USER', 'ADMIN')
-    @Put('/updata')
-    ChangeData(@Body() dto: UpdateUserDto) {
-        return this.UserService.updateUser(dto)
-    }
+    
 
     @ApiOperation({ summary: 'Получить всех пользователей' })
     @ApiResponse({ status: 200, type: [User] })
