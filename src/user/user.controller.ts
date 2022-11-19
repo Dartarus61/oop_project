@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post, Redirect, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Param, Post, Put, Redirect, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -51,7 +51,7 @@ export class UserController {
     @ApiResponse({ status: 200, type: User })
     @UseGuards(RolesGuard)
     @Roles('USER', 'ADMIN')
-    @Post('/updata')
+    @Put('/updata')
     ChangeData(@Body() dto: UpdateUserDto) {
         return this.UserService.updateUser(dto)
     }
