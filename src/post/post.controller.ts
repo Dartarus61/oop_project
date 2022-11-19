@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Get,
+    Headers,
     Post,
     Query,
     UploadedFile,
@@ -27,11 +28,15 @@ export class PostController {
     @ApiOperation({ summary: 'Создание статьи' })
     @ApiResponse({ status: 201, type: UPost })
     @UseGuards(RolesGuard)
-    @Roles('ADMIN')
+    @Roles('ADMIN', 'CREATOR')
     @Post('/create')
     @UseInterceptors(AnyFilesInterceptor())
-    createPost(@Body() dto: CreatePostDto, @UploadedFiles() files?: Array<Express.Multer.File>) {
-        return this.postService.createPost(dto, files)
+    createPost(
+        @Headers('authorization') authorization: string,
+        @Body() dto: CreatePostDto,
+        @UploadedFiles() files?: Array<Express.Multer.File>
+    ) {
+        return this.postService.createPost(authorization, dto, files)
 
         // return this.postService.CreateSimpePost(dto)
     }

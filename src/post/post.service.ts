@@ -28,9 +28,13 @@ export class PostService {
         private chapterService: ChaptersService
     ) {}
     //Array<Express.Multer.File>
-    async createPost(dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
+    async createPost(authorization: string, dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
         try {
-            const user = await this.userService.getUserById(dto.userId)
+            console.log(dto)
+            console.log(123123)
+            console.log(files)
+
+            /* const user = await this.userService.getUserById(dto.userId)
             if (user) {
                 const post = await this.postRepository.create({ title: dto.title })
                 await user.$add('posts', post)
@@ -48,14 +52,14 @@ export class PostService {
                 console.log('file was written successfuly')
 
                 return post
-            }
+            } */
             throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
         } catch (error) {
             throw error
         }
     }
 
-    async CreateSimpePost(dto: CreatePostDto): Promise<object> {
+    /* async CreateSimpePost(dto: CreatePostDto): Promise<object> {
         try {
             const user = await this.userService.getUserById(dto.userId)
             if (user) {
@@ -71,7 +75,7 @@ export class PostService {
         } catch (error) {
             throw error
         }
-    }
+    } */
 
     async Offerconstruct(posts) {
         try {
