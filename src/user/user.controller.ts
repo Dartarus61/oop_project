@@ -26,7 +26,7 @@ export class UserController {
     @Redirect('http://localhost:3000/login')
     async activation(@Param('value') value: string) {
         const fuser = await this.UserService.activate(value)
-        return {url: 'http://localhost:3000/myProfile'}
+        return { url: 'http://localhost:3000/myProfile' }
     }
 
     @ApiOperation({ summary: 'Поиск пользователя по почте' })
@@ -66,7 +66,7 @@ export class UserController {
     }
 
     @Get('/profile')
-    refresh(@Headers('authorization') authorization: string) {
+    userProfile(@Headers('authorization') authorization: string) {
         return this.UserService.GetMyProfile(authorization)
     }
 }

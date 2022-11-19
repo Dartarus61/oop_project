@@ -81,11 +81,10 @@ export class AuthService {
         await user.update({ password: hashPassword })
 
         const userDto = new OutputUserDto(user)
-        const tokens = this.generateToken(user)
+        const tokens = await this.generateToken(user)
 
         return {
             ...tokens,
-            user: userDto,
         }
     }
 
