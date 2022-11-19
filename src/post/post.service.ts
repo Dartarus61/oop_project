@@ -14,6 +14,7 @@ import { UPost } from '../models/post.model'
 import { CommentService } from 'src/comment/comment.service'
 import * as fs from 'fs'
 import * as path from 'path'
+import { TokenService } from 'src/token/token.service'
 
 @Injectable()
 export class PostService {
@@ -25,7 +26,8 @@ export class PostService {
         @Inject(forwardRef(() => CommentService))
         private commentService: CommentService,
         private fileService: FilesService,
-        private chapterService: ChaptersService
+        private chapterService: ChaptersService,
+        private tokenService: TokenService
     ) {}
     //Array<Express.Multer.File>
     async createPost(authorization: string, dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
@@ -33,26 +35,27 @@ export class PostService {
             console.log(dto)
             console.log(123123)
             console.log(files)
-
-            /* const user = await this.userService.getUserById(dto.userId)
+            const userData = await this.tokenService.getDataFromToken(authorization)
+            const user = await this.userService.getUserById(userData.id)
             if (user) {
                 const post = await this.postRepository.create({ title: dto.title })
                 await user.$add('posts', post)
-                const chapt = await this.chapterService.GetChupterByName(dto.chapter)
-                const sub = await this.chapterService.GetSubByName(dto.subsection)
+                const chapt = await this.chapterService.GetChupterByName(dto.category)
+                const sub = await this.chapterService.GetSubByName(dto.subCategory)
                 await chapt.$add('posts', post)
                 await sub.$add('posts', post)
                 if (files) {
-                    const newFiles = await this.fileService.createFile(dto.description, files)
+                    const links = dto.links.split(',')
+                    const newFiles = await this.fileService.createFile(dto.text, files, links)
                     post.$add('files', newFiles)
                     return post
                 }
-                const nameingOfTXT = await this.fileService.createFile(dto.description)
+                const nameingOfTXT = await this.fileService.createFile(dto.text)
                 await post.$add('files', nameingOfTXT)
                 console.log('file was written successfuly')
 
                 return post
-            } */
+            }
             throw new HttpException('не найден пользователь', HttpStatus.NOT_FOUND)
         } catch (error) {
             throw error

@@ -11,6 +11,7 @@ import { PostController } from './post.controller'
 import { UPost } from '../models/post.model'
 import { PostService } from './post.service'
 import { CommentModule } from 'src/comment/comment.module'
+import { TokenModule } from 'src/token/token.module'
 
 @Module({
     controllers: [PostController],
@@ -19,10 +20,11 @@ import { CommentModule } from 'src/comment/comment.module'
         forwardRef(() => ChaptersModule),
         SequelizeModule.forFeature([User, UPost, Chapter]),
         FilesModule,
-        forwardRef(()=>UserModule),
-        forwardRef(()=>CommentModule),
+        forwardRef(() => UserModule),
+        forwardRef(() => CommentModule),
         JwtModule,
         AuthModule,
+        TokenModule,
     ],
     exports: [PostService],
 })

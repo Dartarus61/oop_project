@@ -9,7 +9,7 @@ import { FileFolder } from '../models/file.model'
 export class FilesService {
     constructor(@InjectModel(FileFolder) private fileRepository: typeof FileFolder) {}
 
-    async createFile(text?: string, file?: Array<Express.Multer.File>): Promise<FileFolder[]> {
+    async createFile(text?: string, file?: Array<Express.Multer.File>, links?: string[]): Promise<FileFolder[]> {
         try {
             const masReturn: any[] = []
             const filePath = path.resolve(__dirname, '..', 'static')
@@ -20,16 +20,30 @@ export class FilesService {
             if (file) {
                 let fileName = ''
                 for (let index = 0; index < file.length; index++) {
-                    fileName = uuid.v4() + '.jpg'
-
+                    fileName = links[index] + '.jpg'
                     fs.writeFileSync(path.join(filePath, fileName), file[index].buffer)
                     masReturn.push(fileName)
                 }
             }
-            const fileNameTxt = uuid.v4() + '.txt'
-            fs.writeFileSync(path.join(filePath, fileNameTxt), text)
-            masReturn.push(fileNameTxt)
-            return await this.GenerateFileDB(masReturn)
+            let textOfPost = text
+            for (let i = 0; i < links.length; i++) {
+                textOfPost = textOfPost.replace(links[i], `<img src="${process.env.URL_FOR_IMG}${links[i]}"/>`)
+            }
+
+            const textInArr = textOfPost.split('\n')
+            let strdata = ''
+            for (let i = 0; i < textInArr.length; i++) {
+                strdata += `<div>${textInArr[i]}</div>`
+            }
+            strdata = `<div> ${strdata} </div>`
+            console.log(strdata)
+
+            const fileName = uuid.v4()
+            const fileNameForOriginal = fileName + ' original.txt'
+            fs.writeFileSync(path.join(filePath, fileName + '.txt'), strdata)
+            fs.writeFileSync(path.join(filePath, fileNameForOriginal), text)
+            masReturn.push(fileName + '.txt', fileNameForOriginal)
+            return this.GenerateFileDB(masReturn)
         } catch (e) {
             console.log(e)
 

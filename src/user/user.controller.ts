@@ -2,7 +2,6 @@ import { Body, Controller, Get, Headers, Param, Post, Put, Redirect, UseGuards }
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
-import { BackupService } from 'src/backup/backup.service'
 import { ChangeRoleDto } from './dto/ChangeRole.dto'
 import { CreateUserDto } from './dto/create_user.dto'
 import { UpdateUserDto } from './dto/UpdateUser.dto'
@@ -11,7 +10,7 @@ import { UserService } from './user.service'
 @ApiTags('Пользователи')
 @Controller('user')
 export class UserController {
-    constructor(private UserService: UserService, private BackupService: BackupService) {}
+    constructor(private UserService: UserService) {}
 
     @ApiOperation({ summary: 'Создание пользователя' })
     @ApiResponse({ status: 201, type: User })
@@ -46,8 +45,6 @@ export class UserController {
     ChangeRole(@Body() dto: ChangeRoleDto) {
         return this.UserService.addRole(dto)
     }
-
-    
 
     @ApiOperation({ summary: 'Получить всех пользователей' })
     @ApiResponse({ status: 200, type: [User] })

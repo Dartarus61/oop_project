@@ -14,9 +14,6 @@ import { UserRoles } from './models/user-roles.model'
 import { FilesModule } from './files/files.module'
 import { CommentModule } from './comment/comment.module'
 import { Comment } from './models/comment.model'
-import { BackupModule } from './backup/backup.module'
-import { History } from './backup/backup-history.model'
-import { Details } from './backup/backup-details.model'
 import { ChaptersModule } from './chapters/chapters.module'
 import { Chapter } from './models/chapter.model'
 import { FileFolder } from './models/file.model'
@@ -52,7 +49,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || 'postgres',
             database: process.env.DB_NAME || 'tryoop',
-            models: [User, UPost, Role, UserRoles, Comment, History, Details, Chapter, FileFolder],
+            models: [User, UPost, Role, UserRoles, Comment, Chapter, FileFolder],
             autoLoadModels: true,
             /* sync: { force: true }, */
             /* dialectOptions:{
@@ -68,7 +65,6 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
         RoleModule,
         FilesModule,
         CommentModule,
-        BackupModule,
         ChaptersModule,
     ],
 })

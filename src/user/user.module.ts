@@ -3,7 +3,6 @@ import { forwardRef, Module } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { SequelizeModule } from '@nestjs/sequelize'
 import { AuthModule } from 'src/auth/auth.module'
-import { BackupModule } from 'src/backup/backup.module'
 import { MailModule } from 'src/mail/mail.module'
 import { UPost } from 'src/models/post.model'
 import { Role } from 'src/models/role.model'
@@ -23,10 +22,9 @@ import { PostModule } from 'src/post/post.module'
     imports: [
         SequelizeModule.forFeature([User, Role, UserRoles, UPost]),
         RoleModule,
-        BackupModule,
         MailModule,
         forwardRef(() => AuthModule),
-        forwardRef(()=>PostModule),
+        forwardRef(() => PostModule),
         HttpModule.register({
             timeout: 5000,
             maxRedirects: 5,
