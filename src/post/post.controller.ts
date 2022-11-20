@@ -55,7 +55,7 @@ export class PostController {
     @ApiResponse({ status: 201, type: [UPost] })
     @UseGuards(RolesGuard)
     @Roles('CREATOR', 'ADMIN')
-    @Get('/getoff/:value')
+    @Get('/getoff/sub/:value')
     GetSubchaptersOffers(@Param('value') name: string) {
         return this.postService.getPostBySubChapters(name)
     }
