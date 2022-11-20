@@ -9,6 +9,7 @@ import { TokenService } from 'src/token/token.service'
 import { PostService } from 'src/post/post.service'
 import { CommentService } from 'src/comment/comment.service'
 import { profileUserDto } from './dto/profileUser.dto'
+import { Role } from 'src/models/role.model'
 
 @Injectable()
 export class UserService {
@@ -44,11 +45,9 @@ export class UserService {
         return users
     }
 
-    async updateUser(dto: UpdateUserDto, user:User) {
-
+    async updateUser(dto: UpdateUserDto, user: User) {
         await user.update({ ...dto })
         return user
-        
     }
 
     async getUserByEmail(email: string) {
@@ -60,7 +59,7 @@ export class UserService {
     }
 
     async getUserById(id: number) {
-        const user = await this.userRepository.findByPk(id)
+        const user = await this.userRepository.findByPk(id, { include: [Role] })
         if (user) return user
         throw new HttpException('пользователь не найден', HttpStatus.NOT_FOUND)
     }
@@ -90,7 +89,7 @@ export class UserService {
 
         let userProfileData = await this.getUserById(decoded.id)
 
-        let userObject = { ...decoded, name: userProfileData.name, surname: userProfileData.surname}
+        let userObject = { ...decoded, name: userProfileData.name, surname: userProfileData.surname }
         userObject.roles = userObject.roles.map((el) => {
             return el.value
         })
