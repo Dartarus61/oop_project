@@ -10,7 +10,7 @@ interface PostCreationAttrs {
     filePath: string
 }
 
-@Table({ tableName: 'Comment', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'Comment', timestamps: true, freezeTableName: true })
 export class Comment extends Model<Comment> {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
     @Column({
@@ -26,8 +26,12 @@ export class Comment extends Model<Comment> {
     description: string
 
     @ApiProperty({ example: 5, description: 'ID пользователя, который написал комментарий' })
+    @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER, allowNull: false })
     userId: number
+
+    @BelongsTo(() => User)
+    user: User
 
     @ForeignKey(() => UPost)
     @Column({ type: DataType.INTEGER })

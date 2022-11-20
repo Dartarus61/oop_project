@@ -3,6 +3,7 @@ import { BelongsToMany, Column, DataType, HasMany, Model, Table } from 'sequeliz
 import { UPost } from 'src/models/post.model'
 import { Role } from 'src/models/role.model'
 import { UserRoles } from 'src/models/user-roles.model'
+import { Comment } from './comment.model'
 
 interface UserCreationAttrs {
     email: string
@@ -51,4 +52,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasMany(() => UPost)
     posts: UPost[]
+
+    @HasMany(() => Comment)
+    comments: Comment[]
 }

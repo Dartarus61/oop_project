@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
+import { userInfo } from 'os'
 import { Comment } from 'src/models/comment.model'
 import { UPost } from 'src/models/post.model'
+import { User } from 'src/models/user.model'
 import { SetComment } from './dto/comment.dto'
 
 @Injectable()
@@ -27,6 +29,9 @@ export class CommentService {
     }
 
     async getCommentByPostId(id: number) {
-        return this.commentRepository.findAll({ where: { postId: id } })
+        const comments = await this.commentRepository.findAll({ where: { postId: id }, include: [User] })
+        return comments.map((el) => {
+            return { name: `${el.user.name} ${el.user.surname}`, createdAt: el.createdAt, text: el.description }
+        })
     }
 }
