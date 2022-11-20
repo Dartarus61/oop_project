@@ -8,7 +8,7 @@ import { CreateChapterDto } from './dto/CreateChapter.dto'
 import { CreateSubChapterDto } from './dto/CreateSubChapter.dto'
 
 @ApiTags('Разделы и подразделы')
-@Controller('chapters')
+@Controller('chapter')
 export class ChaptersController {
     constructor(private chapterService: ChaptersService, private postService: PostService) {}
 
