@@ -3,6 +3,7 @@ import {
     Controller,
     Get,
     Headers,
+    Param,
     Post,
     Query,
     UploadedFile,
@@ -45,8 +46,17 @@ export class PostController {
     @ApiResponse({ status: 201, type: [UPost] })
     @UseGuards(RolesGuard)
     @Roles('CREATOR', 'ADMIN')
-    @Post('/getoff')
-    GetOffers(@Body('id') id: number) {
+    @Get('/getoff/:id')
+    GetUserOffers(@Param('id') id: number) {
         return this.postService.GetOffersByUserId(id)
+    }
+
+    @ApiOperation({ summary: 'Получение статей по названию подглавы' })
+    @ApiResponse({ status: 201, type: [UPost] })
+    @UseGuards(RolesGuard)
+    @Roles('CREATOR', 'ADMIN')
+    @Get('/getoff/:value')
+    GetSubchaptersOffers(@Param('value') name: string) {
+        return this.postService.getPostBySubChapters(name)
     }
 }

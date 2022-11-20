@@ -18,6 +18,7 @@ import { TokenService } from 'src/token/token.service'
 
 @Injectable()
 export class PostService {
+    uuidCodeRegExp = /\s\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/gm
     constructor(
         @InjectModel(UPost) private postRepository: typeof UPost,
         @InjectModel(User) private userRepository: typeof User,
@@ -113,6 +114,7 @@ export class PostService {
         const posts = await this.postRepository.findAll({ where: { userId: id }, include: { all: true } })
         const tempPosts = JSON.stringify(posts, null, 2)
         const final = JSON.parse(tempPosts)
+
         const result = await Promise.all(
             final.map(async (el) => {
                 delete el.chapter
@@ -121,8 +123,22 @@ export class PostService {
                 const commentCount = await this.commentService.getCountByPostId(el.id)
                 el.comments = commentCount.count
                 for (let i = 0; i < el.files.length; i++) {
-                    if (el.files[i].nameOfContent.split('.')[1] === 'txt') {
-                        el.description = this.fileService.GetDataByFilesData(el.files[i])
+                    if (el.files[i].nameOfContent.includes('original.txt')) {
+                        el.description = this.fileService
+                            .GetDataByFilesData(el.files[i])
+                            .split(this.uuidCodeRegExp)
+                            .join('')
+                            .split('\n')
+                            .join('')
+                            .split(' ')
+                        if (el.description.length <= 15) el.description = el.description.join(' ')
+                        else {
+                            let tempOutputDescription = ''
+                            for (let index = 0; index < 15; index++) {
+                                tempOutputDescription += el.description[index] + ' '
+                            }
+                            el.description = tempOutputDescription
+                        }
                         break
                     }
                 }
@@ -131,29 +147,94 @@ export class PostService {
             })
         )
 
-        return final
+        return result
     }
 
-    async GetGroupOffersByModule(chapter: string): Promise<object[]> {
-        try {
-            const chapt = await this.chapterService.GetChupterByName(chapter)
-            if (!chapt) throw new HttpException('Обучающий модуль не найден', HttpStatus.NOT_FOUND)
-            const allposts = await this.postRepository.findAll()
-            const postWithComments = await this.Offerconstruct(allposts)
-            return postWithComments
-        } catch (error) {
-            throw error
-        }
+    async getPostById(id: number): Promise<object[]> {
+        const posts = await this.postRepository.findByPk(id, { include: { all: true } })
+        const tempPosts = JSON.stringify(posts, null, 2)
+        const final = JSON.parse(tempPosts)
+
+        const result = await Promise.all(
+            final.map(async (el) => {
+                delete el.chapter
+                delete el.updatedAt
+                el.author = `${el.author.name} ${el.author.surname}`
+                const commentCount = await this.commentService.getCountByPostId(el.id)
+                el.comments = commentCount.count
+                for (let i = 0; i < el.files.length; i++) {
+                    console.log(el.files[i])
+
+                    if (el.files[i].nameOfContent.includes('original.txt')) {
+                        el.description = ''
+                        el.description += this.fileService
+                            .GetDataByFilesData(el.files[i])
+                            .split(this.uuidCodeRegExp)
+                            .join('')
+                            .split('\n')
+                            .join('')
+                            .split(' ')
+
+                        if (el.description.length <= 15) el.description = el.description.join(' ')
+                        else {
+                            let tempOutputDescription = ''
+                            for (let index = 0; index < 15; index++) {
+                                tempOutputDescription += el.description[index] + ' '
+                            }
+                            el.description = tempOutputDescription
+                        }
+                        break
+                    }
+                }
+                delete el.files
+                return el
+            })
+        )
+
+        return result
     }
 
-    /* async getPostBySubChapters(id: number) {
-        try {
-            const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
-            return posts
-        } catch (error) {
-            throw error
-        }
-    } */
+    async getPostBySubChapters(name: string) {
+        const posts = await this.postRepository.findAll({ where: { subchapterName: name }, include: { all: true } })
+        const tempPosts = JSON.stringify(posts, null, 2)
+        const final = JSON.parse(tempPosts)
+        console.log(tempPosts)
+
+        const result = await Promise.all(
+            final.map(async (el) => {
+                delete el.chapter
+                delete el.updatedAt
+                el.author = `${el.author.name} ${el.author.surname}`
+                const commentCount = await this.commentService.getCountByPostId(el.id)
+                el.comments = commentCount.count
+                for (let i = 0; i < el.files.length; i++) {
+                    if (el.files[i].nameOfContent.includes('original.txt')) {
+                        el.description = this.fileService.GetDataByFilesData(el.files[i])
+                        console.log(el.description)
+                        el.description = el.description
+                            .split(this.uuidCodeRegExp)
+                            .join('')
+                            .split('\n')
+                            .join('')
+                            .split(' ')
+                        if (el.description.length <= 15) el.description = el.description.join(' ')
+                        else {
+                            let tempOutputDescription = ''
+                            for (let index = 0; index < 15; index++) {
+                                tempOutputDescription += el.description[index] + ' '
+                            }
+                            el.description = tempOutputDescription
+                        }
+                        break
+                    }
+                }
+                delete el.files
+                return el
+            })
+        )
+
+        return result
+    }
 
     async getCountPostByid(id: number) {
         const count = await this.postRepository.findAndCountAll({ where: { userId: id } })

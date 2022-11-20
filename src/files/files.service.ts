@@ -62,12 +62,7 @@ export class FilesService {
     }
 
     GetDataByFilesData(fileData) {
-        if (fileData.nameOfContent.split('.')[1] === 'txt') {
-            let data = fs.readFileSync(path.resolve(fileData.contentPath, fileData.nameOfContent)).toString('utf-8')
-            return data
-        } else {
-            let data = fs.readFileSync(path.resolve(fileData.contentPath, fileData.nameOfContent))
-            return data
-        }
+        let data = fs.readFileSync(path.resolve(fileData.contentPath, fileData.nameOfContent)).toString('utf-8')
+        return data
     }
 }
