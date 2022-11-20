@@ -19,6 +19,7 @@ import { Chapter } from './models/chapter.model'
 import { FileFolder } from './models/file.model'
 import { MailerModule } from '@nestjs-modules/mailer'
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
+import { SendfileModule } from './sendfile/sendfile.module'
 
 @Module({
     imports: [
@@ -66,6 +67,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
         FilesModule,
         CommentModule,
         ChaptersModule,
+        SendfileModule,
     ],
 })
 export class AppModule {}
