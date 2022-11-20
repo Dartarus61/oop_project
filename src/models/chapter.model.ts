@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
 import { UPost } from 'src/models/post.model'
 
-@Table({ tableName: 'Chapter', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'Chapter', timestamps: false, freezeTableName: true })
 export class Chapter extends Model<Chapter> {
     @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({
@@ -22,10 +22,4 @@ export class Chapter extends Model<Chapter> {
 
     @Column({ type: DataType.STRING, allowNull: true })
     path: string
-
-    @HasMany(() => UPost)
-    posts: UPost[]
-
-    /* @HasMany(() => SubChapt)
-    subChapt: SubChapt[] */
 }

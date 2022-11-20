@@ -26,11 +26,21 @@ export class ChaptersController {
         return this.chapterService.GetMenu()
     }
 
-    @ApiOperation({ summary: 'Получение всех статей из подраздела' })
+    @Get('/')
+    GetChapters() {
+        return this.chapterService.GetAllChapters()
+    }
+
+    @Get('/subs/:value')
+    GetSubchapter(@Param('value') value: string) {
+        return this.chapterService.GetSubChapterByChapterName(value)
+    }
+
+    /* @ApiOperation({ summary: 'Получение всех статей из подраздела' })
     @ApiResponse({ status: HttpStatus.OK, type: [UPost] })
     @Get('/:value')
     GetPosts(@Param('value') id: number) {
         return this.postService.getPostBySubChapters(id)
-    }
+    } */
     //TODO:Проверить работу метода
 }

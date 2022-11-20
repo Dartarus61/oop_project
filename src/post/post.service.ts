@@ -38,12 +38,12 @@ export class PostService {
             const userData = await this.tokenService.getDataFromToken(authorization)
             const user = await this.userService.getUserById(userData.id)
             if (user) {
-                const post = await this.postRepository.create({ title: dto.title })
+                const post = await this.postRepository.create({
+                    title: dto.title,
+                    chapterName: dto.category,
+                    subchapterName: dto.subCategory,
+                })
                 await user.$add('posts', post)
-                const chapt = await this.chapterService.GetChupterByName(dto.category)
-                const sub = await this.chapterService.GetSubByName(dto.subCategory)
-                await chapt.$add('posts', post)
-                await sub.$add('posts', post)
                 if (files) {
                     const links = dto.links.split(',')
                     const newFiles = await this.fileService.createFile(dto.text, files, links)
@@ -146,14 +146,14 @@ export class PostService {
         }
     }
 
-    async getPostBySubChapters(id: number) {
+    /* async getPostBySubChapters(id: number) {
         try {
             const posts = await this.postRepository.findAll({ where: { chapterrId: id } })
             return posts
         } catch (error) {
             throw error
         }
-    }
+    } */
 
     async getCountPostByid(id: number) {
         const count = await this.postRepository.findAndCountAll({ where: { userId: id } })

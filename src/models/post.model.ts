@@ -15,13 +15,8 @@ import { Comment } from 'src/models/comment.model'
 import { FileFolder } from 'src/models/file.model'
 import { User } from 'src/models/user.model'
 
-interface PostCreationAttrs {
-    description: string
-    title: string
-}
-
-@Table({ tableName: 'Post', timestamps:true, freezeTableName:true  })
-export class UPost extends Model<UPost, PostCreationAttrs> {
+@Table({ tableName: 'Post', timestamps: true, freezeTableName: true })
+export class UPost extends Model<UPost> {
     @ApiProperty({ example: 1, description: 'Уникальный идентификатор' })
     @Column({
         type: DataType.INTEGER,
@@ -52,17 +47,9 @@ export class UPost extends Model<UPost, PostCreationAttrs> {
     @HasMany(() => Comment)
     comments: Comment[]
 
-    /* @ForeignKey(() => Chapter)
-    @Column({ type: DataType.INTEGER })
-    subchapterId: number
+    @Column({ type: DataType.STRING, allowNull: false })
+    chapterName: string
 
-    @BelongsTo(() => SubChapt)
-    subChapt: SubChapt */
-
-    @ForeignKey(() => Chapter)
-    @Column({ type: DataType.INTEGER })
-    chapterrId: number
-
-    @BelongsTo(() => Chapter)
-    chapter: Chapter
+    @Column({ type: DataType.STRING, allowNull: false })
+    subchapterName: string
 }
