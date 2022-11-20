@@ -150,48 +150,20 @@ export class PostService {
         return result
     }
 
-    async getPostById(id: number): Promise<object[]> {
+    async getPostById(id: number) {
         const posts = await this.postRepository.findByPk(id, { include: { all: true } })
         const tempPosts = JSON.stringify(posts, null, 2)
         const final = JSON.parse(tempPosts)
+        for (let i = 0; i < final.files.length; i++) {
+            if (!final.files[i].nameOfContent.includes('original') && final.files[i].nameOfContent.includes('.txt')) {
+                console.log(final.files[i])
 
-        const result = await Promise.all(
-            final.map(async (el) => {
-                delete el.chapter
-                delete el.updatedAt
-                el.author = `${el.author.name} ${el.author.surname}`
-                const commentCount = await this.commentService.getCountByPostId(el.id)
-                el.comments = commentCount.count
-                for (let i = 0; i < el.files.length; i++) {
-                    console.log(el.files[i])
+                const data = this.fileService.GetDataByFilesData(final.files[i])
+                console.log(data)
 
-                    if (el.files[i].nameOfContent.includes('original.txt')) {
-                        el.description = ''
-                        el.description += this.fileService
-                            .GetDataByFilesData(el.files[i])
-                            .split(this.uuidCodeRegExp)
-                            .join('')
-                            .split('\n')
-                            .join('')
-                            .split(' ')
-
-                        if (el.description.length <= 15) el.description = el.description.join(' ')
-                        else {
-                            let tempOutputDescription = ''
-                            for (let index = 0; index < 15; index++) {
-                                tempOutputDescription += el.description[index] + ' '
-                            }
-                            el.description = tempOutputDescription
-                        }
-                        break
-                    }
-                }
-                delete el.files
-                return el
-            })
-        )
-
-        return result
+                return data
+            }
+        }
     }
 
     async getPostBySubChapters(name: string) {

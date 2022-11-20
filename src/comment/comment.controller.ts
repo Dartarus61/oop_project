@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -18,5 +18,10 @@ export class CommentController {
     @Post('/setcom')
     SetComment(@Body() dto: SetComment) {
         return this.commentService.setComment(dto)
+    }
+
+    @Get('/:id')
+    getCommentByPostId(@Param('id') id: number) {
+        return this.commentService.getCommentByPostId(id)
     }
 }

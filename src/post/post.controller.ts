@@ -59,4 +59,13 @@ export class PostController {
     GetSubchaptersOffers(@Param('value') name: string) {
         return this.postService.getPostBySubChapters(name)
     }
+
+    @ApiOperation({ summary: 'Получение статеьи по ID' })
+    @ApiResponse({ status: 201, type: [UPost] })
+    @UseGuards(RolesGuard)
+    @Roles('CREATOR', 'ADMIN')
+    @Get('/:id')
+    getPostById(@Param('id') id: number) {
+        return this.postService.getPostById(id)
+    }
 }

@@ -6,8 +6,10 @@ import { SetComment } from './dto/comment.dto'
 
 @Injectable()
 export class CommentService {
-    constructor(@InjectModel(UPost) private postRepository: typeof UPost,
-    @InjectModel(Comment) private commentRepository: typeof Comment) {}
+    constructor(
+        @InjectModel(UPost) private postRepository: typeof UPost,
+        @InjectModel(Comment) private commentRepository: typeof Comment
+    ) {}
 
     async setComment(dto: SetComment) {
         const NewComment = await this.postRepository.findOne({ where: { id: dto.postId } })
@@ -16,10 +18,14 @@ export class CommentService {
     }
 
     async getCountByUserId(id: number) {
-        return (await this.commentRepository.findAndCountAll({where:{userId:id}})).count
+        return (await this.commentRepository.findAndCountAll({ where: { userId: id } })).count
     }
 
     async getCountByPostId(id: number) {
-        return this.commentRepository.findAndCountAll({where:{postId:id}})
+        return this.commentRepository.findAndCountAll({ where: { postId: id } })
+    }
+
+    async getCommentByPostId(id: number) {
+        return this.commentRepository.findAll({ where: { postId: id } })
     }
 }
