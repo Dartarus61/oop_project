@@ -161,7 +161,7 @@ export class PostService {
                 const data = this.fileService.GetDataByFilesData(final.files[i])
                 console.log(data)
 
-                return data
+                return { title: posts.title, data: JSON.stringify(data) }
             }
         }
     }

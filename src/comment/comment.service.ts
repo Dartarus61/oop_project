@@ -12,8 +12,9 @@ export class CommentService {
     ) {}
 
     async setComment(dto: SetComment) {
-        const NewComment = await this.postRepository.findOne({ where: { id: dto.postId } })
-        await NewComment.$create('comments', { description: dto.ctx, userId: dto.userId })
+        const post = await this.postRepository.findOne({ where: { id: dto.postId } })
+        const NewComment = await this.commentRepository.create({ description: dto.ctx, userId: dto.userId })
+        await post.$add('comments', NewComment)
         return NewComment
     }
 
