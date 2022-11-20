@@ -79,18 +79,11 @@ export class ChaptersService {
             for (let i = 0; i < main.length; i++) {
                 const temp = JSON.stringify(main[i], null, 2)
                 direction.push(JSON.parse(temp))
-                subchapts = await this.ChapterRepository.findAll({
-                    where: {
-                        path: {
-                            [Op.startsWith]: `${main[i].name}.`,
-                        },
-                    },
-                })
-                subchapts.map((el) => {
-                    el = JSON.stringify(el, null, 2)
-                    el = JSON.parse(el)
-                    const temp = el.path.split('.')
-                    if (temp[1] !== null && el.name == temp[1] && temp.length == 3) childs.push(el)
+                delete direction[i].path
+                delete direction[i].idParent
+                subchapts = await this.ChapterRepository.findAll({ where: { idParent: main[i].id } })
+                subchapts.forEach((el) => {
+                    childs.push(el.name)
                 })
                 direction[i].childs = childs
                 childs = []
