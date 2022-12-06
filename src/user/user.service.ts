@@ -10,12 +10,15 @@ import { PostService } from 'src/post/post.service'
 import { CommentService } from 'src/comment/comment.service'
 import { profileUserDto } from './dto/profileUser.dto'
 import { Role } from 'src/models/role.model'
+import { BanList } from 'src/models/banlist.model'
+import { BanUserDto } from './dto/banUser.dto'
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel(User)
         private userRepository: typeof User,
+        @InjectModel(BanList) private banRepository: typeof BanList,
         private roleService: RoleService,
         private tokenService: TokenService,
         private commentService: CommentService,
@@ -98,5 +101,32 @@ export class UserService {
         userObject.posts = await this.postService.GetOffersByUserId(decoded.id)
         console.log({ user: userObject })
         return userObject
+    }
+
+    async banUser(banData: BanUserDto) {
+        const user = await this.getUserById(banData.userId)
+
+        if (!user) throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
+
+        const newBanUser = await this.banRepository.create({ ...banData })
+
+        return newBanUser
+    }
+
+    async getBanList() {
+        const banList = await this.banRepository.findAll({ include: { all: true } })
+        banList.map((el) => {
+            return { ...el, user: `${el.user.name} ${el.user.surname}` }
+        })
+    }
+
+    async removeFromBan(userId: number) {
+        const unbanned = await this.banRepository.findOne({ where: { userId } })
+
+        if (!unbanned) throw new HttpException('Забаненный пользователь в списке не найден', HttpStatus.NOT_FOUND)
+
+        unbanned.destroy()
+
+        return unbanned
     }
 }

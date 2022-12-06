@@ -14,13 +14,14 @@ import { UserService } from './user.service'
 import { TokenModule } from 'src/token/token.module'
 import { CommentModule } from 'src/comment/comment.module'
 import { PostModule } from 'src/post/post.module'
+import { BanList } from 'src/models/banlist.model'
 
 @Module({
     controllers: [UserController],
     providers: [UserService],
     exports: [UserService],
     imports: [
-        SequelizeModule.forFeature([User, Role, UserRoles, UPost]),
+        SequelizeModule.forFeature([User, Role, UserRoles, UPost, BanList]),
         RoleModule,
         MailModule,
         forwardRef(() => AuthModule),

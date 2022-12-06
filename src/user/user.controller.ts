@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create_user.dto'
 import { UpdateUserDto } from './dto/UpdateUser.dto'
 import { User } from '../models/user.model'
 import { UserService } from './user.service'
+import { BanUserDto } from './dto/banUser.dto'
+import { retry } from 'rxjs'
 @ApiTags('Пользователи')
 @Controller('user')
 export class UserController {
@@ -58,5 +60,26 @@ export class UserController {
     @Get('/profile')
     userProfile(@Headers('authorization') authorization: string) {
         return this.UserService.GetMyProfile(authorization)
+    }
+
+    @Post('/ban')
+    @UseGuards(RolesGuard)
+    @Roles('ADMIN')
+    banUser(@Body() banData: BanUserDto) {
+        return this.UserService.banUser(banData)
+    }
+
+    @Post('/unban')
+    @UseGuards(RolesGuard)
+    @Roles('ADMIN')
+    unbanUser(@Body('userId') id: number) {
+        return this.UserService.removeFromBan(id)
+    }
+
+    @Get('/banlist')
+    @UseGuards(RolesGuard)
+    @Roles('ADMIN')
+    getList() {
+        return this.UserService.getBanList()
     }
 }
