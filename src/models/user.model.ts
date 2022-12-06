@@ -4,6 +4,8 @@ import { UPost } from 'src/models/post.model'
 import { Role } from 'src/models/role.model'
 import { UserRoles } from 'src/models/user-roles.model'
 import { Comment } from './comment.model'
+import { LikeComment } from './likeComments.model'
+import { LikePost } from './likePost.model'
 
 interface UserCreationAttrs {
     email: string
@@ -55,4 +57,10 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasMany(() => Comment)
     comments: Comment[]
+
+    @HasMany(() => LikePost)
+    likePost: LikePost[]
+
+    @HasMany(() => LikeComment)
+    likeComment: LikeComment[]
 }
