@@ -20,6 +20,7 @@ import { FileFolder } from './models/file.model'
 import { MailerModule } from '@nestjs-modules/mailer'
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 import { SendfileModule } from './sendfile/sendfile.module'
+import { LikesystemModule } from './likesystem/likesystem.module'
 
 @Module({
     imports: [
@@ -68,6 +69,7 @@ import { SendfileModule } from './sendfile/sendfile.module'
         CommentModule,
         ChaptersModule,
         SendfileModule,
+        LikesystemModule,
     ],
 })
 export class AppModule {}
