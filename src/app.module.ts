@@ -21,6 +21,8 @@ import { MailerModule } from '@nestjs-modules/mailer'
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 import { SendfileModule } from './sendfile/sendfile.module'
 import { LikesystemModule } from './likesystem/likesystem.module'
+import { LikeComment } from './models/likeComments.model'
+import { LikePost } from './models/likePost.model'
 
 @Module({
     imports: [
@@ -51,7 +53,7 @@ import { LikesystemModule } from './likesystem/likesystem.module'
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || 'postgres',
             database: process.env.DB_NAME || 'tryoop',
-            models: [User, UPost, Role, UserRoles, Comment, Chapter, FileFolder],
+            models: [User, UPost, Role, UserRoles, Comment, Chapter, FileFolder, LikeComment, LikePost],
             autoLoadModels: true,
             /* sync: { force: true }, */
             /* dialectOptions:{

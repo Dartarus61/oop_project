@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post, Put, Redirect, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Redirect, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -9,6 +9,8 @@ import { User } from '../models/user.model'
 import { UserService } from './user.service'
 import { BanUserDto } from './dto/banUser.dto'
 import { retry } from 'rxjs'
+import { BanList } from 'src/models/banlist.model'
+import { OutputBanListDto } from './dto/outputBanList.dto'
 @ApiTags('Пользователи')
 @Controller('user')
 export class UserController {
@@ -62,6 +64,8 @@ export class UserController {
         return this.UserService.GetMyProfile(authorization)
     }
 
+    @ApiOperation({ summary: 'Бан пользователя' })
+    @ApiResponse({ status: 200, type: BanList })
     @Post('/ban')
     @UseGuards(RolesGuard)
     @Roles('ADMIN')
@@ -69,6 +73,8 @@ export class UserController {
         return this.UserService.banUser(banData)
     }
 
+    @ApiOperation({ summary: 'Разбан пользователя' })
+    @ApiResponse({ status: 200, type: BanList })
     @Post('/unban')
     @UseGuards(RolesGuard)
     @Roles('ADMIN')
@@ -76,10 +82,20 @@ export class UserController {
         return this.UserService.removeFromBan(id)
     }
 
+    @ApiOperation({ summary: 'Список забанненных' })
+    @ApiResponse({ status: 200, type: OutputBanListDto })
     @Get('/banlist')
     @UseGuards(RolesGuard)
     @Roles('ADMIN')
     getList() {
         return this.UserService.getBanList()
+    }
+
+    @ApiOperation({ summary: 'Удаление роли у пользователя' })
+    @Delete('/delrole')
+    @UseGuards(RolesGuard)
+    @Roles('ADMIN')
+    deleteRole(@Body() roleData: ChangeRoleDto) {
+        return this.UserService.removeRole(roleData)
     }
 }
