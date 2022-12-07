@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { UPost } from 'src/models/post.model'
 import { PostService } from 'src/post/post.service'
@@ -31,16 +31,15 @@ export class ChaptersController {
         return this.chapterService.GetAllChapters()
     }
 
+    @ApiOperation({ summary: 'Получение подглав по имени главы' })
     @Get('/subs/:value')
     GetSubchapter(@Param('value') value: string) {
         return this.chapterService.GetSubChapterByChapterName(value)
     }
 
-    /* @ApiOperation({ summary: 'Получение всех статей из подраздела' })
-    @ApiResponse({ status: HttpStatus.OK, type: [UPost] })
-    @Get('/:value')
-    GetPosts(@Param('value') id: number) {
-        return this.postService.getPostBySubChapters(id)
-    } */
-    //TODO:Проверить работу метода
+    @ApiOperation({ summary: 'Удаление главы' })
+    @Delete('/delch/:name')
+    DeleteChapter(@Param('name') name: string) {
+        return this.chapterService.deleteChapter(name)
+    }
 }

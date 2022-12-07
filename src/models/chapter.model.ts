@@ -14,7 +14,7 @@ export class Chapter extends Model<Chapter> {
     id: number
 
     @ApiProperty({ example: 'Java', description: 'Название раздела' })
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: false, unique: true })
     name: string
 
     @Column({ type: DataType.INTEGER, allowNull: true })

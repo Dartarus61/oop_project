@@ -13,9 +13,11 @@ export class BanList extends Model<BanList> {
     })
     id: number
 
+    @ApiProperty({ example: 'Оскорбление пользователей', description: 'Причина бана' })
     @Column({ type: DataType.STRING, allowNull: false })
     banReason: string
 
+    @ApiProperty({ example: 5, description: 'ID забаненного пользователя' })
     @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER })
     userId: number

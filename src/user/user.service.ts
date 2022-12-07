@@ -129,4 +129,14 @@ export class UserService {
 
         return unbanned
     }
+
+    async removeRole(roleData: ChangeRoleDto) {
+        const user = await this.userRepository.findByPk(roleData.userId)
+        const role = await this.roleService.getRoleByValue(roleData.value)
+        if (role && user) {
+            await user.$remove('roles', [role.id])
+            return user
+        }
+        throw new HttpException('Пользователь или роль не найдена', HttpStatus.NOT_FOUND)
+    }
 }

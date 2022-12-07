@@ -94,5 +94,14 @@ export class ChaptersService {
             throw new HttpException(error, HttpStatus.BAD_GATEWAY)
         }
     }
+
+    async deleteChapter(name: string) {
+        const chapter = await this.ChapterRepository.findOne({ where: { name } })
+
+        if (!chapter) throw new HttpException('Глава или подглава не найдена', HttpStatus.NOT_FOUND)
+
+        await chapter.destroy()
+
+        return chapter
+    }
 }
-//TODO: запрос подраздела - выдача всех статей по этому подразделу
