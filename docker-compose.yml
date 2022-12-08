@@ -3,7 +3,7 @@ services:
     postgres:
         image: postgres:13.3
         environment:
-            POSTGRES_DB: 'tryoop'
+            POSTGRES_DB: 'habrdb'
             POSTGRES_USER: 'habrpguser'
             POSTGRES_PASSWORD: 'postgres'
             PGDATA: '/var/lib/postgresql/data/tryoop'
