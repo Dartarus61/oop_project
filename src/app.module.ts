@@ -50,7 +50,7 @@ import { LikePost } from './models/likePost.model'
             dialect: 'postgres',
             host: process.env.DB_HOST || 'localhost',
             port: Number(process.env.DB_PORT) || 5432,
-            username: process.env.DB_USER || 'postgres',
+            username: process.env.DB_USER || 'habrpguser',
             password: process.env.DB_PASSWORD || 'postgres',
             database: process.env.DB_NAME || 'tryoop',
             models: [User, UPost, Role, UserRoles, Comment, Chapter, FileFolder, LikeComment, LikePost],
