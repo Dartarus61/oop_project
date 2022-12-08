@@ -52,7 +52,7 @@ import { LikePost } from './models/likePost.model'
             port: Number(process.env.DB_PORT) || 5432,
             username: process.env.DB_USER || 'habrpguser',
             password: process.env.DB_PASSWORD || 'postgres',
-            database: process.env.DB_NAME || 'tryoop',
+            database: process.env.DB_NAME || 'habrdb',
             models: [User, UPost, Role, UserRoles, Comment, Chapter, FileFolder, LikeComment, LikePost],
             autoLoadModels: true,
             /* sync: { force: true }, */
