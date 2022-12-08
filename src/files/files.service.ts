@@ -26,11 +26,14 @@ export class FilesService {
                 }
             }
             let textOfPost = text
-            for (let i = 0; i < links.length; i++) {
-                textOfPost = textOfPost.replace(
-                    links[i],
-                    `</div><img src="${process.env.URL_FOR_IMG}${links[i]}"/><div>`
-                )
+            console.log(links.indexOf(''))
+            if (links.indexOf('') != 0) {
+                for (let i = 0; i < links.length; i++) {
+                    textOfPost = textOfPost.replace(
+                        links[i],
+                        `</div><img src="${process.env.URL_FOR_IMG}${links[i]}"/><div>`
+                    )
+                }
             }
 
             const textInArr = textOfPost.split('\n')
