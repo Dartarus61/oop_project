@@ -9,11 +9,35 @@ module.exports = {
                 {
                     name: 'Java',
                 },
+                {
+                    name: 'Python',
+                },
 
                 {
                     name: 'JavaFX',
                     idParent: 1,
                     path: 'Java.JavaFX',
+                },
+                {
+                    name: 'FXML',
+                    idParent: 1,
+                    path: 'Java.FXML',
+                },
+                {
+                    name: 'Pane',
+                    idParent: 1,
+                    path: 'Java.Pane',
+                },
+
+                {
+                    name: 'Introduction',
+                    idParent: 2,
+                    path: 'Python.Introduction',
+                },
+                {
+                    name: 'Base',
+                    idParent: 2,
+                    path: 'Python.Base',
                 },
             ],
             {}
