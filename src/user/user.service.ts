@@ -118,6 +118,7 @@ export class UserService {
         banList.map((el) => {
             return { ...el, user: `${el.user.name} ${el.user.surname}` }
         })
+        return banList
     }
 
     async removeFromBan(userId: number) {
