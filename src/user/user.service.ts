@@ -12,6 +12,7 @@ import { profileUserDto } from './dto/profileUser.dto'
 import { Role } from 'src/models/role.model'
 import { BanList } from 'src/models/banlist.model'
 import { BanUserDto } from './dto/banUser.dto'
+import { Op } from 'sequelize'
 
 @Injectable()
 export class UserService {
@@ -44,7 +45,18 @@ export class UserService {
     }
 
     async getAll() {
-        const users = await this.userRepository.findAll({ include: { all: true } })
+        const banList = await (
+            await this.banRepository.findAll()
+        ).map((el) => {
+            return el.id
+        })
+        const users = await this.userRepository.findAll({
+            where: {
+                id: {
+                    [Op.notIn]: banList,
+                },
+            },
+        })
         return users
     }
 
