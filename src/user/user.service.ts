@@ -50,6 +50,8 @@ export class UserService {
         ).map((el) => {
             return el.id
         })
+        console.log(banList)
+
         const users = await this.userRepository.findAll({
             where: {
                 id: {
