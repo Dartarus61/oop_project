@@ -48,7 +48,7 @@ export class UserService {
         const banList = await (
             await this.banRepository.findAll()
         ).map((el) => {
-            return el.id
+            return el.userId
         })
         console.log(banList)
 
