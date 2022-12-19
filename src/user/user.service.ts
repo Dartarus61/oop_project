@@ -58,6 +58,7 @@ export class UserService {
                     [Op.notIn]: banList,
                 },
             },
+            include: [Role],
         })
         return users
     }
