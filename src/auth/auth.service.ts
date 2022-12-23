@@ -27,7 +27,7 @@ export class AuthService {
         if (candidate) {
             throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
         }
-        const hashPassword = await bcrypt.hash(userDto.password, 5)
+        const hashPassword = await bcrypt.hash(userDto.password, 7)
         const acticationLink = uuid.v4()
         const user = await this.userService.createUser({ ...userDto, password: hashPassword, acticationLink })
 
@@ -79,7 +79,7 @@ export class AuthService {
             throw new HttpException('Новый пароль не может совпадать со старым', HttpStatus.BAD_REQUEST)
         }
 
-        const hashPassword = await bcrypt.hash(dto.newPassword, 3)
+        const hashPassword = await bcrypt.hash(dto.newPassword, 7)
         await user.update({ password: hashPassword })
 
         const userDto = new OutputUserDto(user)
@@ -105,7 +105,7 @@ export class AuthService {
         if (!user) throw new HttpException('Неверный код', HttpStatus.NOT_FOUND)
 
         user.switchKey = null
-        const hashPassword = await bcrypt.hash(dto.newPass, 3)
+        const hashPassword = await bcrypt.hash(dto.newPass, 7)
 
         await user.update({ password: hashPassword, switchKey: null })
 

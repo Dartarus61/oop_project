@@ -4,23 +4,15 @@ import { User } from './user.model'
 
 @Table({ tableName: 'LikePost', timestamps: true, freezeTableName: true })
 export class LikePost extends Model<LikePost> {
-    @Column({
-        type: DataType.INTEGER,
-        unique: true,
-        autoIncrement: true,
-        primaryKey: true,
-    })
-    id: number
-
     @ForeignKey(() => UPost)
-    @Column({ type: DataType.INTEGER })
+    @Column({ type: DataType.INTEGER, primaryKey: true })
     postId: number
 
     @BelongsTo(() => UPost)
     post: UPost
 
     @ForeignKey(() => User)
-    @Column({ type: DataType.INTEGER })
+    @Column({ type: DataType.INTEGER, primaryKey: true })
     userId: number
 
     @BelongsTo(() => User)
