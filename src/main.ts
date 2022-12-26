@@ -5,7 +5,7 @@ async function bootstrap() {
     const PORT = process.env.PORT || 8080
     const app = await NestFactory.create(AppModule)
 
-    /* app.enableCors({
+    app.enableCors({
         origin: [
             'http://localhost:5000/',
             'http://188.225.87.70:5000/',
@@ -15,7 +15,7 @@ async function bootstrap() {
         ],
         credentials: true,
     })
- */
+
     const config = new DocumentBuilder()
         .setTitle('OOP project')
         .setDescription('The backend Node API description')
