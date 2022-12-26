@@ -33,9 +33,6 @@ export class PostService {
     //Array<Express.Multer.File>
     async createPost(authorization: string, dto: CreatePostDto, files?: Array<Express.Multer.File>): Promise<object> {
         try {
-            console.log(dto)
-            console.log(123123)
-            console.log(files)
             const userData = await this.tokenService.getDataFromToken(authorization)
             const user = await this.userService.getUserById(userData.id)
             if (user) {
@@ -53,7 +50,6 @@ export class PostService {
                 }
                 const nameingOfTXT = await this.fileService.createFile(dto.text)
                 await post.$add('files', nameingOfTXT)
-                console.log('file was written successfuly')
 
                 return post
             }
@@ -156,10 +152,7 @@ export class PostService {
         const final = JSON.parse(tempPosts)
         for (let i = 0; i < final.files.length; i++) {
             if (!final.files[i].nameOfContent.includes('original') && final.files[i].nameOfContent.includes('.txt')) {
-                console.log(final.files[i])
-
                 const data = this.fileService.GetDataByFilesData(final.files[i])
-                console.log(data)
 
                 return { title: posts.title, data: data.toString() }
             }
@@ -170,7 +163,6 @@ export class PostService {
         const posts = await this.postRepository.findAll({ where: { subchapterName: name }, include: { all: true } })
         const tempPosts = JSON.stringify(posts, null, 2)
         const final = JSON.parse(tempPosts)
-        console.log(tempPosts)
 
         const result = await Promise.all(
             final.map(async (el) => {
@@ -182,7 +174,7 @@ export class PostService {
                 for (let i = 0; i < el.files.length; i++) {
                     if (el.files[i].nameOfContent.includes('original.txt')) {
                         el.description = this.fileService.GetDataByFilesData(el.files[i])
-                        console.log(el.description)
+
                         el.description = el.description
                             .split(this.uuidCodeRegExp)
                             .join('')

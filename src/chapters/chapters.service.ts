@@ -16,12 +16,8 @@ export class ChaptersService {
             }
             const parent = await this.ChapterRepository.findByPk(dto.idParent)
             if (parent) {
-                console.log(parent)
-
                 let path = ''
                 if (parent.path === null) {
-                    console.log(111)
-
                     path = `${parent.name}.${dto.name}.`
                 } else {
                     path = `${parent.path}${dto.name}.`

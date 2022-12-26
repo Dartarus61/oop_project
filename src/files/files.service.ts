@@ -26,7 +26,7 @@ export class FilesService {
                 }
             }
             let textOfPost = text
-            console.log(links.indexOf(''))
+
             if (links.indexOf('') != 0) {
                 for (let i = 0; i < links.length; i++) {
                     textOfPost = textOfPost.replace(
@@ -42,7 +42,6 @@ export class FilesService {
                 strdata += `<div>${textInArr[i]}</div>`
             }
             strdata = `<div> ${strdata} </div>`
-            console.log(strdata)
 
             const fileName = uuid.v4()
             const fileNameForOriginal = fileName + ' original.txt'

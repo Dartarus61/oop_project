@@ -50,7 +50,6 @@ export class UserService {
         ).map((el) => {
             return el.userId
         })
-        console.log(banList)
 
         const users = await this.userRepository.findAll({
             where: {
@@ -114,7 +113,7 @@ export class UserService {
         userObject.commentCount = await this.commentService.getCountByUserId(decoded.id)
         userObject.postCount = await this.postService.getCountPostByid(decoded.id)
         userObject.posts = await this.postService.GetOffersByUserId(decoded.id)
-        console.log({ user: userObject })
+
         return userObject
     }
 

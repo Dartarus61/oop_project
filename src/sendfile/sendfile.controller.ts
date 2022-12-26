@@ -7,8 +7,6 @@ import * as path from 'path'
 export class SendfileController {
     @Get('/img/:fileName')
     getPicture(@Param('fileName') fileName: string, @Res() res: Response) {
-        console.log(path.resolve(__dirname, '../static/', fileName))
-
         return res.sendFile(path.resolve(__dirname, '../static/', fileName + '.jpg'))
     }
 }
