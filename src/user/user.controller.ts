@@ -61,6 +61,7 @@ export class UserController {
 
     @Get('/profile')
     userProfile(@Headers('authorization') authorization: string) {
+        if (authorization === undefined) return
         return this.UserService.GetMyProfile(authorization)
     }
 
