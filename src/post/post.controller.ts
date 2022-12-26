@@ -44,7 +44,6 @@ export class PostController {
 
     @ApiOperation({ summary: 'Получение статей по ID пользователя' })
     @ApiResponse({ status: 201, type: [UPost] })
-    @UseGuards(RolesGuard)
     @Get('/getoff/:id')
     GetUserOffers(@Param('id') id: number) {
         return this.postService.GetOffersByUserId(id)
@@ -52,7 +51,6 @@ export class PostController {
 
     @ApiOperation({ summary: 'Получение статей по названию подглавы' })
     @ApiResponse({ status: 201, type: [UPost] })
-    @UseGuards(RolesGuard)
     @Get('/getoff/sub/:value')
     GetSubchaptersOffers(@Param('value') name: string) {
         return this.postService.getPostBySubChapters(name)
@@ -60,7 +58,6 @@ export class PostController {
 
     @ApiOperation({ summary: 'Получение статеьи по ID' })
     @ApiResponse({ status: 201, type: [UPost] })
-    @UseGuards(RolesGuard)
     @Get('/:id')
     getPostById(@Param('id') id: number) {
         return this.postService.getPostById(id)
